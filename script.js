@@ -1,26 +1,44 @@
 const BIKE_IMAGES = {
   gravel: { src: "assets/gravel.png", alt: "Gravel bike silhouette" },
   mtb: { src: "assets/mtb.png", alt: "Mountain bike silhouette" },
-  road: { src: "assets/road.png", alt: "Road bike silhouette" },
-  touring: { src: "assets/gravel.png", alt: "Touring bike silhouette" }
+  road: { src: "assets/road.png", alt: "Road bike silhouette" }
 };
 
 const BAG_PRODUCTS = {
-  saddle: { name: "Saddle Bag MKIII", price: "EUR 97.27" },
-  frame: { name: "Zip Frame Bag M MKIII", price: "EUR 55.07" },
-  handlebar: { name: "Bar Roll MKIII", price: "EUR 74.53" },
-  top: { name: "Fuel Bag L MKIII", price: "EUR 40.58" },
-  tool: { name: "Tool Wallet MKIII", price: "EUR 19.46" }
+  saddle: { name: "Saddle Bag MKIII", basePrice: 97.27 },
+  frame: { name: "Zip Frame Bag MKIII", basePrice: 55.07 },
+  handlebar: { name: "Bar Roll MKIII", basePrice: 74.53 },
+  top: { name: "Fuel Bag MKIII", basePrice: 40.58 },
+  tool: { name: "Tool Wallet MKIII", basePrice: 19.46 }
+};
+
+const defaultSetup = {
+  color: "Black",
+  size: "L",
+  version: "MKIII",
+  priceDelta: 0
 };
 
 const state = {
-  bike: localStorage.getItem("acepacBike") || "gravel",
+  bike: BIKE_IMAGES[localStorage.getItem("acepacBike")] ? localStorage.getItem("acepacBike") : "gravel",
+  setup: { ...defaultSetup },
+  productConfig: { color: "Black", size: "L", version: "MKIII" },
   cart: readCart()
 };
 
+function formatPrice(value) {
+  return `EUR ${value.toFixed(2)}`;
+}
+
 function readCart() {
   try {
-    return JSON.parse(localStorage.getItem("acepacCart")) || [];
+    const stored = JSON.parse(localStorage.getItem("acepacCart")) || [];
+    return stored.map((item) => {
+      if (typeof item === "string") {
+        return { type: item, ...defaultSetup, priceDelta: 0 };
+      }
+      return { ...defaultSetup, priceDelta: 0, ...item };
+    }).filter((item) => BAG_PRODUCTS[item.type]);
   } catch {
     return [];
   }
@@ -30,15 +48,37 @@ function saveCart() {
   localStorage.setItem("acepacCart", JSON.stringify(state.cart));
 }
 
-function addBag(type) {
-  if (!state.cart.includes(type)) {
-    state.cart.push(type);
-    saveCart();
+function getCartItem(type) {
+  return state.cart.find((item) => item.type === type);
+}
+
+function priceFor(item) {
+  const product = BAG_PRODUCTS[item.type];
+  const sizeDelta = item.size === "M" ? -8 : item.size === "XL" ? 12 : 0;
+  const versionDelta = item.version === "MKII" ? -10 : 0;
+  return product.basePrice + sizeDelta + versionDelta + Number(item.priceDelta || 0);
+}
+
+function addOrRemoveBag(type, source = "overview") {
+  const existingIndex = state.cart.findIndex((item) => item.type === type);
+  if (existingIndex >= 0) {
+    state.cart.splice(existingIndex, 1);
+  } else {
+    const config = source === "product" ? state.productConfig : state.setup;
+    state.cart.push({ type, ...config });
   }
+  saveCart();
+  renderCart();
+}
+
+function removeBag(type) {
+  state.cart = state.cart.filter((item) => item.type !== type);
+  saveCart();
   renderCart();
 }
 
 function setBike(type) {
+  if (!BIKE_IMAGES[type]) return;
   state.bike = type;
   localStorage.setItem("acepacBike", type);
   renderBike();
@@ -48,7 +88,6 @@ function renderBike() {
   const selected = BIKE_IMAGES[state.bike] || BIKE_IMAGES.gravel;
   const stage = document.querySelector("[data-bike-stage]");
   const bikeImage = document.querySelector("[data-bike-image]");
-  const miniBike = document.querySelector("[data-mini-bike]");
 
   if (bikeImage) {
     stage?.classList.add("is-switching");
@@ -59,10 +98,10 @@ function renderBike() {
     }, 120);
   }
 
-  if (miniBike) {
+  document.querySelectorAll("[data-mini-bike]").forEach((miniBike) => {
     miniBike.src = selected.src;
     miniBike.alt = selected.alt;
-  }
+  });
 
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
     button.classList.toggle("active", button.dataset.bikeButton === state.bike);
@@ -76,18 +115,43 @@ function renderCart() {
 
   document.querySelectorAll("[data-bag-overlay], [data-mini-overlay]").forEach((overlay) => {
     const type = overlay.dataset.bagOverlay || overlay.dataset.miniOverlay;
-    overlay.classList.toggle("active", state.cart.includes(type));
+    overlay.classList.toggle("active", Boolean(getCartItem(type)));
   });
 
-  const cartItems = document.querySelector("[data-cart-items]");
-  if (!cartItems) return;
+  document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
+    const type = button.dataset.addToCart;
+    const active = Boolean(getCartItem(type));
+    button.classList.toggle("active", active);
+    if (button.classList.contains("bag-marker")) {
+      const symbol = button.querySelector("span");
+      if (symbol) symbol.textContent = active ? "-" : "+";
+      button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${type} bag`);
+    }
+  });
 
-  cartItems.innerHTML = state.cart.length
-    ? state.cart.map((type) => {
-        const item = BAG_PRODUCTS[type];
-        return `<div class="cart-item"><span>${item.name}</span><span>${item.price}</span></div>`;
-      }).join("")
-    : '<p class="cart-empty">No bags selected yet. Add a bag from the bike preview or product page.</p>';
+  document.querySelectorAll("[data-cart-items]").forEach((cartItems) => {
+    cartItems.innerHTML = state.cart.length
+      ? state.cart.map((item) => {
+          const product = BAG_PRODUCTS[item.type];
+          return `
+            <div class="cart-item">
+              <div>
+                <strong>${product.name}</strong>
+                <span>${item.color} / ${item.size} / ${item.version}</span>
+              </div>
+              <div>
+                <strong>${formatPrice(priceFor(item))}</strong>
+                <button data-remove-bag="${item.type}" aria-label="Remove ${product.name}">Remove</button>
+              </div>
+            </div>
+          `;
+        }).join("")
+      : '<p class="cart-empty">No bags selected yet. Add a bag from the bike preview or product page.</p>';
+  });
+
+  document.querySelectorAll("[data-remove-bag]").forEach((button) => {
+    button.addEventListener("click", () => removeBag(button.dataset.removeBag));
+  });
 }
 
 function initMenu() {
@@ -110,27 +174,58 @@ function initHeader() {
   window.addEventListener("scroll", update, { passive: true });
 }
 
+function initCartDropdown() {
+  const trigger = document.querySelector("[data-cart-toggle]");
+  const popover = document.querySelector("[data-cart-popover]");
+  const close = document.querySelector("[data-cart-close]");
+  if (!trigger || !popover) return;
+
+  const setOpen = (open) => {
+    popover.classList.toggle("open", open);
+    trigger.classList.toggle("active", open);
+  };
+
+  trigger.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setOpen(!popover.classList.contains("open"));
+  });
+
+  close?.addEventListener("click", () => setOpen(false));
+  document.addEventListener("click", (event) => {
+    if (!popover.contains(event.target) && !trigger.contains(event.target)) {
+      setOpen(false);
+    }
+  });
+}
+
 function initConfigurator() {
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
     button.addEventListener("click", () => setBike(button.dataset.bikeButton));
   });
 
-  document.querySelectorAll("[data-color]").forEach((button) => {
+  document.querySelectorAll("[data-setup-choice]").forEach((button) => {
     button.addEventListener("click", () => {
-      document.documentElement.style.setProperty("--bag-color", button.dataset.color);
-      document.querySelectorAll("[data-color]").forEach((item) => item.classList.toggle("active", item === button));
+      const key = button.dataset.setupChoice;
+      state.setup[key] = button.dataset.value;
+      document.querySelectorAll(`[data-setup-choice="${key}"]`).forEach((item) => {
+        item.classList.toggle("active", item === button);
+      });
+      if (key === "color" && button.dataset.color) {
+        document.documentElement.style.setProperty("--bag-color", button.dataset.color);
+      }
     });
   });
 
   document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
     button.addEventListener("click", () => {
-      addBag(button.dataset.addToCart);
-      const original = button.textContent;
+      const source = button.classList.contains("button") ? "product" : "overview";
+      addOrRemoveBag(button.dataset.addToCart, source);
       if (button.classList.contains("button")) {
-        button.textContent = "Added to cart";
+        const original = button.textContent;
+        button.textContent = getCartItem(button.dataset.addToCart) ? "Added to cart" : "Removed";
         window.setTimeout(() => {
           button.textContent = original;
-        }, 1300);
+        }, 1200);
       }
     });
   });
@@ -151,6 +246,12 @@ function initOptions() {
   const basePrice = 97.27;
   const priceNode = document.querySelector("[data-price]");
 
+  const updatePrice = () => {
+    const extra = [...document.querySelectorAll(".option-card.active")]
+      .reduce((sum, item) => sum + Number(item.dataset.priceAdd || 0), 0);
+    if (priceNode) priceNode.textContent = formatPrice(basePrice + extra);
+  };
+
   document.querySelectorAll(".option-card[data-option]").forEach((button) => {
     button.addEventListener("click", () => {
       if (button.disabled) return;
@@ -158,16 +259,17 @@ function initOptions() {
       document.querySelectorAll(`.option-card[data-option="${group}"]`).forEach((item) => item.classList.remove("active"));
       button.classList.add("active");
 
+      state.productConfig[group] = button.dataset.configValue || button.textContent.trim();
+
       if (button.dataset.productImage) {
         const mainImage = document.querySelector(".main-product-image");
         if (mainImage) mainImage.src = button.dataset.productImage;
       }
 
-      const extra = [...document.querySelectorAll(".option-card.active")]
-        .reduce((sum, item) => sum + Number(item.dataset.priceAdd || 0), 0);
-      if (priceNode) priceNode.textContent = `EUR ${(basePrice + extra).toFixed(2)}`;
+      updatePrice();
     });
   });
+  updatePrice();
 }
 
 function initReveal() {
@@ -191,6 +293,7 @@ function initReveal() {
 
 initMenu();
 initHeader();
+initCartDropdown();
 initConfigurator();
 initProductGallery();
 initOptions();

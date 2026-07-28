@@ -22,10 +22,28 @@
         <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button aria-label="Switch language">CZ / EN</button>
-        <button aria-label="Search">Search</button>
-        <button aria-label="User profile">Profile</button>
-        <a href="#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
+        <button class="lang-switch" aria-label="Switch language">CZ / EN</button>
+        <button class="icon-button search-icon" aria-label="Search"></button>
+        <button class="icon-button profile-icon" aria-label="User profile"></button>
+        <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
+          <span class="cart-icon"></span>
+          <span data-cart-count>0</span>
+        </button>
+        <div class="cart-popover" data-cart-popover>
+          <div class="cart-popover-head">
+            <strong>Your setup</strong>
+            <button aria-label="Close cart" data-cart-close>Close</button>
+          </div>
+          <div class="mini-stage">
+            <img data-mini-bike src="assets/gravel.png" alt="Cart bike preview">
+            <div class="bag-overlay saddle" data-mini-overlay="saddle"></div>
+            <div class="bag-overlay frame" data-mini-overlay="frame"></div>
+            <div class="bag-overlay handlebar" data-mini-overlay="handlebar"></div>
+            <div class="bag-overlay top" data-mini-overlay="top"></div>
+            <div class="bag-overlay tool" data-mini-overlay="tool"></div>
+          </div>
+          <div class="cart-items" data-cart-items></div>
+        </div>
       </div>
     </header>
 
@@ -46,7 +64,6 @@
             <button class="active" data-bike-button="gravel">Gravel</button>
             <button data-bike-button="mtb">MTB</button>
             <button data-bike-button="road">Road</button>
-            <button data-bike-button="touring">Touring</button>
           </div>
         </div>
 
@@ -66,14 +83,30 @@
           </div>
 
           <aside class="setup-panel">
-            <h3>Setup color</h3>
-            <div class="swatches" aria-label="Bag color">
-              <button class="active" data-color="#e43020" style="--swatch:#e43020" aria-label="ACEPAC red"></button>
-              <button data-color="#2f6f55" style="--swatch:#2f6f55" aria-label="Forest green"></button>
-              <button data-color="#1f5c75" style="--swatch:#1f5c75" aria-label="Petrol blue"></button>
-              <button data-color="#111111" style="--swatch:#111111" aria-label="Black"></button>
+            <h3>Bag setup</h3>
+            <p>Default options for the next bag added to the bike. MKIII is selected automatically; MKII stays available as the value option.</p>
+            <div class="setup-group">
+              <span>Color</span>
+              <div class="choice-row" aria-label="Bag color">
+                <button class="active" data-setup-choice="color" data-value="Black" data-color="#111111">Black</button>
+                <button data-setup-choice="color" data-value="Grey" data-color="#77736c">Grey</button>
+              </div>
             </div>
-            <p>The bag overlays use the chosen setup color so the cart preview feels personal without needing every physical color rendered.</p>
+            <div class="setup-group">
+              <span>Size</span>
+              <div class="choice-row" aria-label="Bag size">
+                <button data-setup-choice="size" data-value="M">M</button>
+                <button class="active" data-setup-choice="size" data-value="L">L</button>
+                <button data-setup-choice="size" data-value="XL">XL</button>
+              </div>
+            </div>
+            <div class="setup-group">
+              <span>Version</span>
+              <div class="choice-row" aria-label="Bag version">
+                <button class="active" data-setup-choice="version" data-value="MKIII" data-price-delta="0">MKIII</button>
+                <button data-setup-choice="version" data-value="MKII" data-price-delta="-10">MKII - EUR 10</button>
+              </div>
+            </div>
             <a class="button primary" href="product.html">Open Saddle Bag MKIII</a>
           </aside>
         </div>
@@ -81,48 +114,29 @@
 
       <section class="bag-category-grid" aria-label="Bag categories">
         <a href="product.html" class="bag-category reveal">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/saddle-bag-sketch.png" alt="Saddle bag sketch" loading="lazy">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2" alt="Saddle Bag MKIII" loading="lazy">
           <span>Saddle bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/bar_roll_sketch.png" alt="Handlebar bag sketch" loading="lazy">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1682-12_bar-roll-grey--148023-3.png?ff=1&x=1024&y=768&q=85&ts=63da3f59&sg=161563f2" alt="Bar Roll MKIII" loading="lazy">
           <span>Handlebar bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/zip_frame_bag_sketch.png" alt="Frame bag sketch" loading="lazy">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1769-6_zip-frame-bag-m-mkiii-black--159203-7.jpg?ff=1&x=1024&y=768&q=85&ts=63eb5604&sg=161563f2" alt="Zip Frame Bag M MKIII" loading="lazy">
           <span>Frame bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/minima_bag_sketch.png" alt="Cookware bag sketch" loading="lazy">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1721-7_minima-bag-grey--152020-3.jpg?ff=1&x=1024&y=768&q=85&ts=63dcee3e&sg=161563f2" alt="Minima Bag MKIII" loading="lazy">
           <span>Cookware bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/tool_wallet_sketch.png" alt="Tool wallet sketch" loading="lazy">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1751-2_tool-wallet-mkiii-grey--156028-2.jpg?ff=1&x=1024&y=768&q=85&ts=63eb322f&sg=161563f2" alt="Tool Wallet MKIII" loading="lazy">
           <span>Tool bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/fuel_bag_m_sketch_no_preview.svg" alt="Top tube bag sketch" loading="lazy">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1703_fuel-bag-l-mkiii-black--151306-1.jpg?ff=1&x=1024&y=768&q=85&ts=63dcd9b5&sg=161563f2" alt="Fuel Bag L MKIII" loading="lazy">
           <span>Top tube bags</span>
         </a>
-      </section>
-
-      <section id="cart" class="cart-overview reveal">
-        <div>
-          <p class="eyebrow red">Cart intelligence</p>
-          <h2>Miniature setup in checkout</h2>
-          <p>The cart does not only list products. It mirrors the bike with the selected bags, making missing positions instantly visible.</p>
-        </div>
-        <div class="cart-preview">
-          <div class="mini-stage">
-            <img data-mini-bike src="assets/gravel.png" alt="Cart bike preview">
-            <div class="bag-overlay saddle" data-mini-overlay="saddle"></div>
-            <div class="bag-overlay frame" data-mini-overlay="frame"></div>
-            <div class="bag-overlay handlebar" data-mini-overlay="handlebar"></div>
-            <div class="bag-overlay top" data-mini-overlay="top"></div>
-            <div class="bag-overlay tool" data-mini-overlay="tool"></div>
-          </div>
-          <div class="cart-items" data-cart-items></div>
-        </div>
       </section>
     </main>
 
