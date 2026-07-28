@@ -3,66 +3,70 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About ACEPAC - Showcase</title>
-    <meta name="description" content="About page concept for ACEPAC.">
+    <title>About ACEPAC - Concept</title>
+    <meta name="description" content="Modern about page concept for ACEPAC.">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <header class="site-header light-header">
+    <header class="site-header light" data-header>
       <a class="brand" href="index.html" aria-label="ACEPAC home">
         <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/logos/acepac_all_white-3.svg" alt="ACEPAC">
       </a>
-      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">Menu</button>
-      <nav class="main-nav" aria-label="Main menu">
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" data-menu-toggle>Menu</button>
+      <nav class="main-nav" aria-label="Main menu" data-nav>
         <a href="overview.html">Bikepacking bags</a>
         <a href="overview.html">Backpacks</a>
-        <a href="overview.html">Clothes</a>
+        <a href="overview.html">Clothing</a>
         <a href="overview.html">Accessories</a>
         <a href="about.html">About us</a>
       </nav>
-      <div class="header-actions" aria-label="Account tools">
+      <div class="header-actions" aria-label="Shop tools">
+        <button aria-label="Switch language">CZ / EN</button>
         <button aria-label="Search">Search</button>
-        <button aria-label="User profile">Login</button>
-        <a class="cart-link" href="overview.html#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
+        <button aria-label="User profile">Profile</button>
+        <a href="overview.html#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
       </div>
     </header>
 
-    <main>
+    <main class="about-page">
       <section class="about-hero">
-        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/onas1.jpg" alt="ACEPAC riders outdoors">
-        <div>
+        <div class="about-copy reveal">
           <p class="eyebrow red">About us / O nas</p>
-          <h1>Built by riders who wanted to stay out longer.</h1>
-          <p>A cleaner, editorial about page can keep the humble tone of the current story while making durability, service and sustainability more memorable.</p>
+          <h1>Riders building equipment for staying outside longer.</h1>
+          <p>A sharper about page can keep ACEPAC's straightforward voice while making durability, repairability and lifetime service easier to remember.</p>
         </div>
+        <img class="reveal" src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/onas1.jpg" alt="ACEPAC riders outdoors" loading="lazy">
       </section>
 
-      <section class="about-sections">
-        <article>
+      <section class="story-rail">
+        <article class="reveal">
+          <span>01</span>
           <h2>Who we are</h2>
-          <p>A group of riders with travel ambitions, drawn to rugged terrain, unknown trails and equipment that survives the stories it collects.</p>
+          <p>A group of riders with travel ambitions, drawn to rugged terrain, unknown trails and useful equipment.</p>
         </article>
-        <article>
+        <article class="reveal">
+          <span>02</span>
           <h2>Why bikepacking</h2>
-          <p>The idea is simple: more time in the saddle, more nights outside, and bags designed around riding style instead of racks.</p>
+          <p>More time in the saddle, more nights outside, and bags designed around riding style instead of racks.</p>
         </article>
-        <article>
+        <article class="reveal">
+          <span>03</span>
           <h2>How we build</h2>
-          <p>Durable sewn construction, repairable parts, field-tested attachment systems and a lifetime service mindset.</p>
+          <p>Durable sewn construction, replaceable parts, field-tested attachment systems and a service-first mindset.</p>
         </article>
       </section>
 
       <section class="image-band">
-        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/L1000225.jpg" alt="ACEPAC material detail">
-        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/IMG_4658_1.jpg" alt="ACEPAC workshop detail">
+        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/L1000225.jpg" alt="ACEPAC material detail" loading="lazy">
+        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/IMG_4658_1.jpg" alt="ACEPAC workshop detail" loading="lazy">
       </section>
     </main>
 
     <footer class="site-footer">
-      <span>ACEPAC showcase concept</span>
-      <span>Story, service and sustainability</span>
+      <span>ACEPAC showcase</span>
+      <span>About us</span>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>

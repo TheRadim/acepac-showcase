@@ -3,93 +3,126 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Saddle Bag MKIII - ACEPAC Showcase</title>
-    <meta name="description" content="Modern Saddle Bag MKIII product detail concept.">
+    <title>Saddle Bag MKIII - ACEPAC Concept</title>
+    <meta name="description" content="Modern configurable product page concept for ACEPAC Saddle Bag MKIII.">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <header class="site-header light-header">
+    <header class="site-header light" data-header>
       <a class="brand" href="index.html" aria-label="ACEPAC home">
         <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/logos/acepac_all_white-3.svg" alt="ACEPAC">
       </a>
-      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">Menu</button>
-      <nav class="main-nav" aria-label="Main menu">
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" data-menu-toggle>Menu</button>
+      <nav class="main-nav" aria-label="Main menu" data-nav>
         <a href="overview.html">Bikepacking bags</a>
         <a href="overview.html">Backpacks</a>
-        <a href="overview.html">Clothes</a>
+        <a href="overview.html">Clothing</a>
         <a href="overview.html">Accessories</a>
         <a href="about.html">About us</a>
       </nav>
-      <div class="header-actions" aria-label="Account tools">
+      <div class="header-actions" aria-label="Shop tools">
+        <button aria-label="Switch language">CZ / EN</button>
         <button aria-label="Search">Search</button>
-        <button aria-label="User profile">Login</button>
-        <a class="cart-link" href="overview.html#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
+        <button aria-label="User profile">Profile</button>
+        <a href="overview.html#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
       </div>
     </header>
 
     <main class="product-page">
-      <section class="product-layout">
-        <div class="product-gallery">
+      <section class="product-hero">
+        <div class="product-gallery reveal">
           <img class="main-product-image" src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2" alt="Saddle Bag MKIII grey">
           <div class="thumb-row" aria-label="Product photos">
-            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-40_saddle-bag-grey2.jpg?ff=1&x=100&y=100&q=85&ts=6a105beb&sg=8dda0505" alt="Grey side"></button>
-            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-31_saddle-bag-black-side2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105be8&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-31_saddle-bag-black-side2.jpg?ff=1&x=100&y=100&q=85&ts=6a105be8&sg=8dda0505" alt="Black side"></button>
-            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-37_saddle-bag-grey-on-sadlle-side.jpg?ff=1&x=1024&y=768&q=85&ts=6a105bea&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-37_saddle-bag-grey-on-sadlle-side.jpg?ff=1&x=100&y=100&q=85&ts=6a105bea&sg=8dda0505" alt="Mounted on bike"></button>
-            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-26_inner-drybag-tape.jpg?ff=1&x=1024&y=768&q=85&ts=64f1be72&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-26_inner-drybag-tape.jpg?ff=1&x=100&y=100&q=85&ts=64f1be72&sg=8dda0505" alt="Inner drybag detail"></button>
+            <button class="active" data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-40_saddle-bag-grey2.jpg?ff=1&x=100&y=100&q=85&ts=6a105beb&sg=8dda0505" alt="Grey side" loading="lazy"></button>
+            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-31_saddle-bag-black-side2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105be8&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-31_saddle-bag-black-side2.jpg?ff=1&x=100&y=100&q=85&ts=6a105be8&sg=8dda0505" alt="Black side" loading="lazy"></button>
+            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-37_saddle-bag-grey-on-sadlle-side.jpg?ff=1&x=1024&y=768&q=85&ts=6a105bea&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-37_saddle-bag-grey-on-sadlle-side.jpg?ff=1&x=100&y=100&q=85&ts=6a105bea&sg=8dda0505" alt="Mounted on bike" loading="lazy"></button>
+            <button data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-26_inner-drybag-tape.jpg?ff=1&x=1024&y=768&q=85&ts=64f1be72&sg=161563f2"><img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/related/1724-26_inner-drybag-tape.jpg?ff=1&x=100&y=100&q=85&ts=64f1be72&sg=8dda0505" alt="Inner drybag detail" loading="lazy"></button>
           </div>
         </div>
 
-        <aside class="product-info">
+        <aside class="configuration-panel reveal">
           <p class="breadcrumb">Products / Bikepacking bags / Saddle bags</p>
           <h1>Saddle Bag MKIII</h1>
-          <p class="lead">Spacious 16 L saddle bag with a removable waterproof insole for multi-day rides and rough terrain.</p>
+          <p class="lead">16 L saddle storage with removable waterproof insert, tuned for long rides and rough terrain.</p>
           <div class="price-line">
-            <strong>EUR 97.27</strong>
-            <span>On stock (&gt;5 pcs)</span>
+            <strong data-price>EUR 97.27</strong>
+            <span>In stock</span>
           </div>
 
-          <div class="product-options">
-            <label>
-              Color
-              <select>
-                <option>Black</option>
-                <option>Gray</option>
-              </select>
-            </label>
-            <label>
-              Quantity
-              <input type="number" min="1" value="1">
-            </label>
-          </div>
+          <section class="option-section" aria-label="Saddle bag configuration">
+            <div class="option-header">
+              <h2>Configuration</h2>
+              <button>Compare</button>
+            </div>
+            <div class="config-group">
+              <h3>Bag system</h3>
+              <div class="option-grid two">
+                <button class="option-card active" data-option="system" data-price-add="0">
+                  <strong>Harness + drybag</strong>
+                  <span>Stable saddle mount with removable waterproof liner.</span>
+                </button>
+                <button class="option-card" data-option="system" data-price-add="-39">
+                  <strong>Drybag only</strong>
+                  <span>For riders already owning the harness.</span>
+                </button>
+              </div>
+            </div>
+            <div class="config-group">
+              <h3>Volume</h3>
+              <div class="option-grid two">
+                <button class="option-card active" data-option="volume" data-price-add="0">
+                  <strong>16 L</strong>
+                  <span>Balanced capacity for multi-day bikepacking.</span>
+                </button>
+                <button class="option-card muted" data-option="volume" disabled>
+                  <strong>8 L</strong>
+                  <span>Out of stock in this concept view.</span>
+                </button>
+              </div>
+            </div>
+            <div class="config-group">
+              <h3>Color</h3>
+              <div class="option-grid two">
+                <button class="option-card active" data-option="color" data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-31_saddle-bag-black-side2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105be8&sg=161563f2">
+                  <strong>Black</strong>
+                  <span>Classic ACEPAC stealth finish.</span>
+                </button>
+                <button class="option-card" data-option="color" data-product-image="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2">
+                  <strong>Grey</strong>
+                  <span>Clearer detail visibility on the bike.</span>
+                </button>
+              </div>
+            </div>
+          </section>
 
-          <button class="button primary wide" data-add-to-cart="saddle">Add to cart</button>
-
-          <div class="quick-specs">
-            <span>16 L volume</span>
-            <span>Removable waterproof insole</span>
-            <span>Repairable sewn construction</span>
-            <span>Compatible with rugged riding</span>
-          </div>
+          <button class="button primary wide" data-add-to-cart="saddle">Add configured bag</button>
         </aside>
       </section>
 
-      <section class="product-story">
-        <div>
-          <p class="eyebrow red">Why this page works harder</p>
-          <h2>Make the product feel technical and emotional at once.</h2>
-        </div>
-        <div class="story-grid">
-          <p>Use a larger image gallery, faster color selection, a clearer stock and price block, and simple feature chips that answer the first questions without burying riders in text.</p>
-          <p>Czech-language details can sit in the same structure through a language switch: objem 16 L, vyjimatelná vodotesna vlozka, odolna konstrukce and lifetime service promise.</p>
-        </div>
+      <section class="spec-strip reveal">
+        <article>
+          <span>01</span>
+          <h3>Waterproof insert</h3>
+          <p>Removable liner makes packing and weather protection clearer.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Repairable build</h3>
+          <p>Sewn construction supports long-term service and component replacement.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Trail tested</h3>
+          <p>Designed around rough terrain, attachment stability and real bikepacking use.</p>
+        </article>
       </section>
     </main>
 
     <footer class="site-footer">
-      <span>ACEPAC showcase concept</span>
-      <span>Saddle Bag MKIII product detail</span>
+      <span>ACEPAC showcase</span>
+      <span>Saddle Bag MKIII</span>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>

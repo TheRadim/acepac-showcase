@@ -3,109 +3,123 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bikepacking Bags - ACEPAC Showcase</title>
-    <meta name="description" content="Bike configurator and product overview concept for ACEPAC bikepacking bags.">
+    <title>Bikepacking Bags - ACEPAC Concept</title>
+    <meta name="description" content="Bike-first ACEPAC bag configurator concept.">
+    <link rel="preload" href="assets/gravel.png" as="image">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <header class="site-header light-header">
+    <header class="site-header light" data-header>
       <a class="brand" href="index.html" aria-label="ACEPAC home">
         <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/logos/acepac_all_white-3.svg" alt="ACEPAC">
       </a>
-      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">Menu</button>
-      <nav class="main-nav" aria-label="Main menu">
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" data-menu-toggle>Menu</button>
+      <nav class="main-nav" aria-label="Main menu" data-nav>
         <a href="overview.html">Bikepacking bags</a>
         <a href="overview.html">Backpacks</a>
-        <a href="overview.html">Clothes</a>
+        <a href="overview.html">Clothing</a>
         <a href="overview.html">Accessories</a>
         <a href="about.html">About us</a>
       </nav>
-      <div class="header-actions" aria-label="Account tools">
+      <div class="header-actions" aria-label="Shop tools">
+        <button aria-label="Switch language">CZ / EN</button>
         <button aria-label="Search">Search</button>
-        <button aria-label="User profile">Login</button>
-        <a class="cart-link" href="#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
+        <button aria-label="User profile">Profile</button>
+        <a href="#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
       </div>
     </header>
 
-    <main class="page-main">
-      <section class="page-intro">
+    <main class="page-shell">
+      <section class="page-kicker reveal">
         <p class="breadcrumb">Home / Products / Bikepacking bags</p>
-        <h1>Bikepacking bags</h1>
-        <p>Keep the familiar visual bike idea, but let riders quickly map bags onto the bike they actually ride.</p>
+        <h1>Choose bags on the bike, not beside it.</h1>
+        <p>Vyber typ kola, zvol barvu setu a klikej primo na pozice brasen. Product categories stay familiar, but the decision is visual.</p>
       </section>
 
-      <section class="configurator" aria-label="Bike bag configurator">
-        <div class="config-header">
+      <section class="configurator reveal" aria-label="Bike bag configurator">
+        <div class="configurator-toolbar">
           <div>
-            <p class="eyebrow red">Choose your setup</p>
-            <h2>Bike-first bag selection</h2>
+            <p class="eyebrow red">Bike configurator</p>
+            <h2>Your setup preview</h2>
           </div>
-          <p>Vyberte typ kola a barvu ramu. Plus signs show suggested ACEPAC bag positions.</p>
+          <div class="segmented" role="tablist" aria-label="Bike type">
+            <button class="active" data-bike-button="gravel">Gravel</button>
+            <button data-bike-button="mtb">MTB</button>
+            <button data-bike-button="road">Road</button>
+            <button data-bike-button="touring">Touring</button>
+          </div>
         </div>
 
-        <div class="control-row">
-          <label>
-            Bike type
-            <select data-bike-select>
-              <option value="gravel">Gravel</option>
-              <option value="mtb">MTB</option>
-              <option value="road">Road</option>
-              <option value="touring">Trekking / touring</option>
-            </select>
-          </label>
-          <label class="color-control">
-            Bike color
-            <input type="range" min="0" max="3" value="0" data-color-range>
-            <span data-color-name>Red clay</span>
-          </label>
-        </div>
+        <div class="bike-workbench">
+          <div class="bike-stage" data-bike-stage>
+            <img data-bike-image src="assets/gravel.png" alt="Selected bike silhouette">
+            <button class="bag-marker saddle" data-add-to-cart="saddle" aria-label="Add saddle bag"><span>+</span><em>Saddle</em></button>
+            <button class="bag-marker frame" data-add-to-cart="frame" aria-label="Add frame bag"><span>+</span><em>Frame</em></button>
+            <button class="bag-marker handlebar" data-add-to-cart="handlebar" aria-label="Add handlebar bag"><span>+</span><em>Bar</em></button>
+            <button class="bag-marker top" data-add-to-cart="top" aria-label="Add top tube bag"><span>+</span><em>Top tube</em></button>
+            <button class="bag-marker tool" data-add-to-cart="tool" aria-label="Add tool bag"><span>+</span><em>Tool</em></button>
+            <div class="bag-overlay saddle" data-bag-overlay="saddle"></div>
+            <div class="bag-overlay frame" data-bag-overlay="frame"></div>
+            <div class="bag-overlay handlebar" data-bag-overlay="handlebar"></div>
+            <div class="bag-overlay top" data-bag-overlay="top"></div>
+            <div class="bag-overlay tool" data-bag-overlay="tool"></div>
+          </div>
 
-        <div class="bike-stage large" data-bike-stage>
-          <div class="bike-svg" data-bike-svg aria-label="Selected bike with clickable bag positions"></div>
-          <a class="bag-hotspot saddle" href="product.html" data-bag="saddle">+</a>
-          <a class="bag-hotspot frame" href="product.html" data-bag="frame">+</a>
-          <a class="bag-hotspot handlebar" href="product.html" data-bag="handlebar">+</a>
-          <a class="bag-hotspot top" href="product.html" data-bag="top">+</a>
-          <a class="bag-hotspot tool" href="product.html" data-bag="tool">+</a>
+          <aside class="setup-panel">
+            <h3>Setup color</h3>
+            <div class="swatches" aria-label="Bag color">
+              <button class="active" data-color="#e43020" style="--swatch:#e43020" aria-label="ACEPAC red"></button>
+              <button data-color="#2f6f55" style="--swatch:#2f6f55" aria-label="Forest green"></button>
+              <button data-color="#1f5c75" style="--swatch:#1f5c75" aria-label="Petrol blue"></button>
+              <button data-color="#111111" style="--swatch:#111111" aria-label="Black"></button>
+            </div>
+            <p>The bag overlays use the chosen setup color so the cart preview feels personal without needing every physical color rendered.</p>
+            <a class="button primary" href="product.html">Open Saddle Bag MKIII</a>
+          </aside>
         </div>
       </section>
 
       <section class="bag-category-grid" aria-label="Bag categories">
-        <a href="product.html" class="bag-category">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/saddle-bag-sketch.png" alt="Saddle bag sketch">
+        <a href="product.html" class="bag-category reveal">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/saddle-bag-sketch.png" alt="Saddle bag sketch" loading="lazy">
           <span>Saddle bags</span>
         </a>
-        <a href="product.html" class="bag-category">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/bar_roll_sketch.png" alt="Handlebar bag sketch">
+        <a href="product.html" class="bag-category reveal">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/bar_roll_sketch.png" alt="Handlebar bag sketch" loading="lazy">
           <span>Handlebar bags</span>
         </a>
-        <a href="product.html" class="bag-category">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/zip_frame_bag_sketch.png" alt="Frame bag sketch">
+        <a href="product.html" class="bag-category reveal">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/zip_frame_bag_sketch.png" alt="Frame bag sketch" loading="lazy">
           <span>Frame bags</span>
         </a>
-        <a href="product.html" class="bag-category">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/minima_bag_sketch.png" alt="Cookware bag sketch">
+        <a href="product.html" class="bag-category reveal">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/minima_bag_sketch.png" alt="Cookware bag sketch" loading="lazy">
           <span>Cookware bags</span>
         </a>
-        <a href="product.html" class="bag-category">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/tool_wallet_sketch.png" alt="Tool wallet sketch">
+        <a href="product.html" class="bag-category reveal">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/tool_wallet_sketch.png" alt="Tool wallet sketch" loading="lazy">
           <span>Tool bags</span>
         </a>
-        <a href="product.html" class="bag-category">
-          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/fuel_bag_m_sketch_no_preview.svg" alt="Top tube bag sketch">
+        <a href="product.html" class="bag-category reveal">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/fuel_bag_m_sketch_no_preview.svg" alt="Top tube bag sketch" loading="lazy">
           <span>Top tube bags</span>
         </a>
       </section>
 
-      <section id="cart" class="cart-overview">
+      <section id="cart" class="cart-overview reveal">
         <div>
-          <p class="eyebrow red">Shopping cart preview</p>
-          <h2>Your bike, with your bags</h2>
-          <p>The miniature updates when a rider adds bags, making it obvious whether the setup includes frame, saddle, handlebar or top tube storage.</p>
+          <p class="eyebrow red">Cart intelligence</p>
+          <h2>Miniature setup in checkout</h2>
+          <p>The cart does not only list products. It mirrors the bike with the selected bags, making missing positions instantly visible.</p>
         </div>
         <div class="cart-preview">
-          <div class="mini-bike">
-            <div class="bike-svg" data-mini-bike></div>
+          <div class="mini-stage">
+            <img data-mini-bike src="assets/gravel.png" alt="Cart bike preview">
+            <div class="bag-overlay saddle" data-mini-overlay="saddle"></div>
+            <div class="bag-overlay frame" data-mini-overlay="frame"></div>
+            <div class="bag-overlay handlebar" data-mini-overlay="handlebar"></div>
+            <div class="bag-overlay top" data-mini-overlay="top"></div>
+            <div class="bag-overlay tool" data-mini-overlay="tool"></div>
           </div>
           <div class="cart-items" data-cart-items></div>
         </div>
@@ -113,10 +127,10 @@
     </main>
 
     <footer class="site-footer">
-      <span>ACEPAC showcase concept</span>
-      <span>Configurator / Prehled brasen</span>
+      <span>ACEPAC showcase</span>
+      <span>Bikepacking overview</span>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
