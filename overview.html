@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bikepacking Bags - ACEPAC Showcase</title>
+    <meta name="description" content="Bike configurator and product overview concept for ACEPAC bikepacking bags.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header light-header">
+      <a class="brand" href="index.html" aria-label="ACEPAC home">
+        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/logos/acepac_all_white-3.svg" alt="ACEPAC">
+      </a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">Menu</button>
+      <nav class="main-nav" aria-label="Main menu">
+        <a href="overview.html">Bikepacking bags</a>
+        <a href="overview.html">Backpacks</a>
+        <a href="overview.html">Clothes</a>
+        <a href="overview.html">Accessories</a>
+        <a href="about.html">About us</a>
+      </nav>
+      <div class="header-actions" aria-label="Account tools">
+        <button aria-label="Search">Search</button>
+        <button aria-label="User profile">Login</button>
+        <a class="cart-link" href="#cart" aria-label="Shopping cart">Cart <span data-cart-count>0</span></a>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <section class="page-intro">
+        <p class="breadcrumb">Home / Products / Bikepacking bags</p>
+        <h1>Bikepacking bags</h1>
+        <p>Keep the familiar visual bike idea, but let riders quickly map bags onto the bike they actually ride.</p>
+      </section>
+
+      <section class="configurator" aria-label="Bike bag configurator">
+        <div class="config-header">
+          <div>
+            <p class="eyebrow red">Choose your setup</p>
+            <h2>Bike-first bag selection</h2>
+          </div>
+          <p>Vyberte typ kola a barvu ramu. Plus signs show suggested ACEPAC bag positions.</p>
+        </div>
+
+        <div class="control-row">
+          <label>
+            Bike type
+            <select data-bike-select>
+              <option value="gravel">Gravel</option>
+              <option value="mtb">MTB</option>
+              <option value="road">Road</option>
+              <option value="touring">Trekking / touring</option>
+            </select>
+          </label>
+          <label class="color-control">
+            Bike color
+            <input type="range" min="0" max="3" value="0" data-color-range>
+            <span data-color-name>Red clay</span>
+          </label>
+        </div>
+
+        <div class="bike-stage large" data-bike-stage>
+          <div class="bike-svg" data-bike-svg aria-label="Selected bike with clickable bag positions"></div>
+          <a class="bag-hotspot saddle" href="product.html" data-bag="saddle">+</a>
+          <a class="bag-hotspot frame" href="product.html" data-bag="frame">+</a>
+          <a class="bag-hotspot handlebar" href="product.html" data-bag="handlebar">+</a>
+          <a class="bag-hotspot top" href="product.html" data-bag="top">+</a>
+          <a class="bag-hotspot tool" href="product.html" data-bag="tool">+</a>
+        </div>
+      </section>
+
+      <section class="bag-category-grid" aria-label="Bag categories">
+        <a href="product.html" class="bag-category">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/saddle-bag-sketch.png" alt="Saddle bag sketch">
+          <span>Saddle bags</span>
+        </a>
+        <a href="product.html" class="bag-category">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/bar_roll_sketch.png" alt="Handlebar bag sketch">
+          <span>Handlebar bags</span>
+        </a>
+        <a href="product.html" class="bag-category">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/zip_frame_bag_sketch.png" alt="Frame bag sketch">
+          <span>Frame bags</span>
+        </a>
+        <a href="product.html" class="bag-category">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/minima_bag_sketch.png" alt="Cookware bag sketch">
+          <span>Cookware bags</span>
+        </a>
+        <a href="product.html" class="bag-category">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/tool_wallet_sketch.png" alt="Tool wallet sketch">
+          <span>Tool bags</span>
+        </a>
+        <a href="product.html" class="bag-category">
+          <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/categories/thumb/fuel_bag_m_sketch_no_preview.svg" alt="Top tube bag sketch">
+          <span>Top tube bags</span>
+        </a>
+      </section>
+
+      <section id="cart" class="cart-overview">
+        <div>
+          <p class="eyebrow red">Shopping cart preview</p>
+          <h2>Your bike, with your bags</h2>
+          <p>The miniature updates when a rider adds bags, making it obvious whether the setup includes frame, saddle, handlebar or top tube storage.</p>
+        </div>
+        <div class="cart-preview">
+          <div class="mini-bike">
+            <div class="bike-svg" data-mini-bike></div>
+          </div>
+          <div class="cart-items" data-cart-items></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>ACEPAC showcase concept</span>
+      <span>Configurator / Prehled brasen</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
