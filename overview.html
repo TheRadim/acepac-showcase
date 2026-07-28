@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bikepacking Bags - ACEPAC Concept</title>
     <meta name="description" content="Bike-first ACEPAC bag configurator concept.">
-    <link rel="preload" href="assets/gravel.png" as="image">
+    <link rel="preload" href="assets/gravel.svg" as="image">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -22,7 +22,7 @@
         <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button class="lang-switch" aria-label="Switch language">CZ / EN</button>
+        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle><span data-lang-flag>EN</span></button>
         <button class="icon-button search-icon" aria-label="Search"></button>
         <button class="icon-button profile-icon" aria-label="User profile"></button>
         <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
@@ -35,14 +35,16 @@
             <button aria-label="Close cart" data-cart-close>Close</button>
           </div>
           <div class="mini-stage">
-            <img data-mini-bike src="assets/gravel.png" alt="Cart bike preview">
+            <img data-mini-bike src="assets/gravel.svg" alt="Cart bike preview">
             <div class="bag-overlay saddle" data-mini-overlay="saddle"></div>
             <div class="bag-overlay frame" data-mini-overlay="frame"></div>
             <div class="bag-overlay handlebar" data-mini-overlay="handlebar"></div>
             <div class="bag-overlay top" data-mini-overlay="top"></div>
             <div class="bag-overlay tool" data-mini-overlay="tool"></div>
+            <span class="cart-more" data-cart-more hidden></span>
           </div>
           <div class="cart-items" data-cart-items></div>
+          <a class="cart-checkout" href="cart.html">Go to shopping cart</a>
         </div>
       </div>
     </header>
@@ -69,7 +71,7 @@
 
         <div class="bike-workbench">
           <div class="bike-stage" data-bike-stage>
-            <img data-bike-image src="assets/gravel.png" alt="Selected bike silhouette">
+            <img data-bike-image src="assets/gravel.svg" alt="Selected bike silhouette">
             <button class="bag-marker saddle" data-add-to-cart="saddle" aria-label="Add saddle bag"><span>+</span><em>Saddle</em></button>
             <button class="bag-marker frame" data-add-to-cart="frame" aria-label="Add frame bag"><span>+</span><em>Frame</em></button>
             <button class="bag-marker handlebar" data-add-to-cart="handlebar" aria-label="Add handlebar bag"><span>+</span><em>Bar</em></button>
@@ -85,6 +87,13 @@
           <aside class="setup-panel">
             <h3>Bag setup</h3>
             <p>Default options for the next bag added to the bike. MKIII is selected automatically; MKII stays available as the value option.</p>
+            <div class="setup-group bike-colour">
+              <span>Bike colour</span>
+              <label class="colour-slider">
+                <input type="range" min="0" max="360" value="8" data-bike-color-slider>
+                <i aria-hidden="true"></i>
+              </label>
+            </div>
             <div class="setup-group">
               <span>Color</span>
               <div class="choice-row" aria-label="Bag color">

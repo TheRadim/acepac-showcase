@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>About ACEPAC - Concept</title>
-    <meta name="description" content="Modern about page concept for ACEPAC.">
+    <title>Shopping Cart - ACEPAC Concept</title>
+    <meta name="description" content="Shopping cart concept for the ACEPAC bikepacking configurator.">
+    <link rel="preload" href="assets/gravel.svg" as="image">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -48,43 +49,38 @@
       </div>
     </header>
 
-    <main class="about-page">
-      <section class="about-hero">
-        <div class="about-copy reveal">
-          <p class="eyebrow red">About us / O nas</p>
-          <h1>Riders building equipment for staying outside longer.</h1>
-          <p>A sharper about page can keep ACEPAC's straightforward voice while making durability, repairability and lifetime service easier to remember.</p>
+    <main class="cart-page">
+      <section class="cart-layout reveal">
+        <div>
+          <p class="breadcrumb">Home / Shopping cart</p>
+          <h1>Your bikepacking setup</h1>
+          <p class="lead">A clearer basket can keep the customer oriented: bike type first, selected bags layered in place, exact options listed underneath.</p>
+          <div class="cart-bike-preview">
+            <img data-mini-bike src="assets/gravel.svg" alt="Selected bike in cart">
+            <div class="bag-overlay saddle" data-mini-overlay="saddle"></div>
+            <div class="bag-overlay frame" data-mini-overlay="frame"></div>
+            <div class="bag-overlay handlebar" data-mini-overlay="handlebar"></div>
+            <div class="bag-overlay top" data-mini-overlay="top"></div>
+            <div class="bag-overlay tool" data-mini-overlay="tool"></div>
+            <span class="cart-more" data-cart-more hidden></span>
+          </div>
         </div>
-        <img class="reveal" src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/onas1.jpg" alt="ACEPAC riders outdoors" loading="lazy">
-      </section>
 
-      <section class="story-rail">
-        <article class="reveal">
-          <span>01</span>
-          <h2>Who we are</h2>
-          <p>A group of riders with travel ambitions, drawn to rugged terrain, unknown trails and useful equipment.</p>
-        </article>
-        <article class="reveal">
-          <span>02</span>
-          <h2>Why bikepacking</h2>
-          <p>More time in the saddle, more nights outside, and bags designed around riding style instead of racks.</p>
-        </article>
-        <article class="reveal">
-          <span>03</span>
-          <h2>How we build</h2>
-          <p>Durable sewn construction, replaceable parts, field-tested attachment systems and a service-first mindset.</p>
-        </article>
-      </section>
-
-      <section class="image-band">
-        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/L1000225.jpg" alt="ACEPAC material detail" loading="lazy">
-        <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/IMG_4658_1.jpg" alt="ACEPAC workshop detail" loading="lazy">
+        <aside class="cart-summary">
+          <h2>Basket</h2>
+          <div class="cart-items" data-cart-items></div>
+          <div class="cart-total">
+            <span>Total</span>
+            <strong data-cart-total>EUR 0.00</strong>
+          </div>
+          <a class="button primary wide" href="overview.html">Continue configuring</a>
+        </aside>
       </section>
     </main>
 
     <footer class="site-footer">
       <span>ACEPAC showcase</span>
-      <span>About us</span>
+      <span>Shopping cart</span>
     </footer>
 
     <script src="script.js" defer></script>
