@@ -5,13 +5,13 @@
   --muted: #686865;
   --paper: #ffffff;
   --surface: #ffffff;
-  --soft: #f3f3f1;
+  --soft: #f4f4f4;
   --line: #d8d8d3;
   --green: #2f6f55;
   --petrol: #1f5c75;
   --bag-color: #111111;
   --bike-src: url("assets/gravel.svg");
-  --bike-color: hsl(0 0% 88%);
+  --bike-color: #dddddd;
   --content-max: 1440px;
   --wide-max: 1680px;
   --shadow: 0 28px 80px rgba(20, 20, 20, .1);
@@ -77,7 +77,7 @@ button {
 .site-header.scrolled,
 .site-header.light {
   color: var(--ink);
-  background: rgba(255, 253, 248, .9);
+  background: rgba(255, 255, 255, .92);
   border-color: rgba(23, 23, 23, .12);
   box-shadow: 0 16px 50px rgba(23, 23, 23, .1);
 }
@@ -168,47 +168,35 @@ button {
   place-items: center;
 }
 
+.icon-button {
+  position: relative;
+}
+
 .lang-switch {
   position: relative;
-  width: 38px;
-  min-width: 38px;
-  height: 38px;
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
   overflow: hidden;
   padding: 0;
-  color: white;
   border-color: rgba(23, 23, 23, .16);
   background: #fff;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .4);
+  border-radius: 50%;
+  box-shadow: 0 7px 18px rgba(0, 0, 0, .12);
 }
 
 .lang-switch::before {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(146deg, #11457e 0 43%, transparent 43%),
-    linear-gradient(to bottom, #fff 0 50%, #d7141a 50% 100%);
-  content: "";
+  display: none;
 }
 
 .lang-switch.en::before {
-  background:
-    linear-gradient(90deg, transparent 0 42%, #cf142b 42% 58%, transparent 58%),
-    linear-gradient(0deg, transparent 0 42%, #cf142b 42% 58%, transparent 58%),
-    #fff;
+  display: none;
 }
 
-.lang-switch span {
-  position: relative;
-  z-index: 1;
-  display: grid;
+.lang-switch img {
   width: 100%;
   height: 100%;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--ink);
-  background: rgba(255, 255, 255, .68);
-  font-size: 10px;
-  letter-spacing: 0;
+  object-fit: cover;
 }
 
 .icon-button::before,
@@ -226,12 +214,25 @@ button {
   transform: rotate(-10deg);
 }
 
-.profile-icon::before {
-  width: 15px;
-  height: 15px;
+.user-icon::before {
+  width: 9px;
+  height: 9px;
   border: 2px solid currentColor;
   border-radius: 50%;
-  box-shadow: 0 11px 0 -4px currentColor;
+  transform: translateY(-5px);
+}
+
+.user-icon::after {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 18px;
+  height: 10px;
+  border: 2px solid currentColor;
+  border-bottom: 0;
+  border-radius: 12px 12px 0 0;
+  transform: translateX(-50%);
+  content: "";
 }
 
 .header-actions .cart-trigger {
@@ -281,7 +282,7 @@ button {
   width: min(420px, calc(100vw - 32px));
   padding: 14px;
   color: var(--ink);
-  background: rgba(255, 253, 248, .96);
+  background: rgba(255, 255, 255, .97);
   border: 1px solid rgba(23, 23, 23, .12);
   border-radius: 8px;
   box-shadow: var(--shadow);
@@ -336,8 +337,8 @@ button {
   padding: 0;
   overflow: hidden;
   background:
-    linear-gradient(120deg, rgba(23, 23, 23, .95), rgba(35, 37, 34, .74)),
-    url("https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/slider_hp/Acepac-Ralsko-brezen-2024-59.jpg") center / cover;
+    linear-gradient(120deg, rgba(12, 12, 12, .86), rgba(18, 18, 18, .62)),
+    url("assets/hero-trail.jpeg") center / cover;
   color: white;
 }
 
@@ -345,7 +346,7 @@ button {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(310px, .84fr) minmax(420px, 1.16fr);
+  grid-template-columns: minmax(320px, .92fr) minmax(360px, 1fr);
   max-width: var(--wide-max);
   min-height: 100vh;
   align-items: center;
@@ -396,8 +397,8 @@ p {
 
 h1 {
   margin-bottom: 22px;
-  font-size: clamp(48px, 7vw, 104px);
-  line-height: .88;
+  font-size: clamp(46px, 6vw, 86px);
+  line-height: .92;
   letter-spacing: 0;
 }
 
@@ -422,6 +423,10 @@ p {
   max-width: 600px;
   color: rgba(255, 255, 255, .78);
   font-size: clamp(18px, 2vw, 22px);
+}
+
+.hero-copy {
+  max-width: 680px;
 }
 
 .hero-actions,
@@ -470,14 +475,14 @@ p {
 .hero-bike {
   position: relative;
   display: grid;
-  min-height: min(48vw, 720px);
+  min-height: min(42vw, 620px);
   place-items: center;
   cursor: pointer;
 }
 
 .hero-bike-svg {
-  width: min(980px, 65vw);
-  height: min(560px, 38vw);
+  width: min(760px, 52vw);
+  height: min(440px, 30vw);
   pointer-events: none;
   filter: drop-shadow(0 40px 60px rgba(0, 0, 0, .35));
   transform: translateX(4vw);
@@ -487,7 +492,8 @@ p {
 .spotlight,
 .cart-overview,
 .product-hero,
-.about-hero {
+.about-hero,
+.about-feature {
   display: grid;
   grid-template-columns: minmax(280px, .9fr) minmax(360px, 1.1fr);
   max-width: var(--content-max);
@@ -517,7 +523,7 @@ p {
 .configuration-panel {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(255, 253, 248, .78);
+  background: rgba(255, 255, 255, .88);
 }
 
 .feature-list article,
@@ -633,13 +639,13 @@ p {
 .page-kicker {
   max-width: var(--content-max);
   margin-inline: auto;
-  padding: clamp(54px, 7vw, 92px) clamp(18px, 5vw, 78px) clamp(24px, 4vw, 42px);
+  padding: clamp(34px, 5vw, 62px) clamp(18px, 5vw, 78px) clamp(12px, 2vw, 24px);
   background: var(--surface);
 }
 
 .page-kicker h1 {
   max-width: 760px;
-  font-size: clamp(30px, 3.5vw, 48px);
+  font-size: clamp(28px, 3vw, 42px);
   line-height: 1;
 }
 
@@ -651,7 +657,7 @@ p {
 .configurator {
   max-width: 1320px;
   margin: 0 auto;
-  padding: clamp(28px, 5vw, 64px) clamp(18px, 5vw, 56px);
+  padding: clamp(18px, 4vw, 42px) clamp(18px, 5vw, 56px) clamp(42px, 6vw, 76px);
   border: 0;
   border-radius: 0;
   background: var(--paper);
@@ -664,6 +670,10 @@ p {
   grid-template-columns: minmax(280px, .9fr) minmax(360px, 1.1fr);
   gap: 24px;
   align-items: center;
+}
+
+.configurator-toolbar h2 {
+  font-size: clamp(34px, 4vw, 56px);
 }
 
 .segmented {
@@ -695,7 +705,7 @@ p {
 }
 
 .bike-workbench {
-  grid-template-columns: minmax(320px, 900px) minmax(300px, 360px);
+  grid-template-columns: minmax(320px, 780px) minmax(280px, 330px);
   justify-content: center;
   margin-top: 30px;
   align-items: start;
@@ -706,13 +716,13 @@ p {
   position: relative;
   aspect-ratio: 16 / 9;
   border-radius: 0;
-  background: var(--soft);
+  background: #f7f7f7;
   overflow: hidden;
 }
 
 .bike-stage {
   width: 100%;
-  max-width: 900px;
+  max-width: 780px;
   justify-self: center;
 }
 
@@ -775,6 +785,10 @@ p {
   background: rgba(23, 23, 23, .92);
   box-shadow: 0 14px 34px rgba(0, 0, 0, .18);
   transition: transform .2s ease;
+}
+
+.bag-marker em {
+  display: none;
 }
 
 .bag-marker.active span {
@@ -840,8 +854,8 @@ p {
   justify-content: flex-start;
   justify-self: end;
   width: 100%;
-  max-width: 330px;
-  gap: 18px;
+  max-width: 320px;
+  gap: 16px;
   padding: 8px 0 0;
   border: 0;
   background: transparent;
@@ -916,6 +930,27 @@ p {
   padding: clamp(50px, 7vw, 96px) clamp(18px, 5vw, 78px);
 }
 
+.bag-category-grid.compact {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: clamp(34px, 5vw, 64px);
+  padding-bottom: clamp(18px, 4vw, 36px);
+}
+
+.bag-category-grid.compact .bag-category {
+  min-height: 160px;
+  padding: 12px;
+}
+
+.bag-category-grid.compact .bag-category img {
+  height: 104px;
+}
+
+.bag-category-grid.compact .bag-category span {
+  color: var(--ink);
+  font-size: 11px;
+}
+
 .bag-category {
   display: grid;
   min-height: 270px;
@@ -944,6 +979,119 @@ p {
   font-size: 13px;
   font-weight: 900;
   text-transform: uppercase;
+}
+
+.section-heading-row,
+.blog-stories,
+.product-row-section {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: clamp(18px, 5vw, 78px);
+}
+
+.section-heading-row {
+  padding-top: clamp(50px, 7vw, 96px);
+  padding-bottom: 28px;
+}
+
+.section-heading-row h2 {
+  max-width: 720px;
+  font-size: clamp(28px, 3.6vw, 50px);
+}
+
+.blog-stories {
+  padding-bottom: clamp(70px, 9vw, 120px);
+}
+
+.story-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.story-card,
+.product-tile {
+  background: #fff;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, .06);
+}
+
+.story-card {
+  display: grid;
+  align-content: start;
+}
+
+.story-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.story-card div {
+  display: grid;
+  gap: 12px;
+  padding: 26px;
+}
+
+.story-card h3 {
+  margin: 0;
+  font-size: clamp(19px, 1.7vw, 24px);
+  line-height: 1.12;
+}
+
+.story-card time {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.story-card p {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.55;
+}
+
+.story-card a {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.product-row-section {
+  padding-bottom: clamp(58px, 8vw, 110px);
+}
+
+.product-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.product-tile {
+  display: grid;
+  gap: 10px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 16px;
+}
+
+.product-tile img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: #f5f5f5;
+}
+
+.product-tile strong {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.product-tile span {
+  color: var(--muted);
+}
+
+.product-tile small {
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .mini-stage {
@@ -1193,6 +1341,18 @@ p {
   line-height: 1.35;
 }
 
+.option-card[data-option="size"] {
+  display: grid;
+  min-height: 58px;
+  place-items: center;
+  text-align: center;
+}
+
+.option-card[data-option="size"] strong {
+  margin: 0;
+  font-size: 18px;
+}
+
 .spec-strip {
   grid-template-columns: repeat(3, 1fr);
   max-width: var(--content-max);
@@ -1262,6 +1422,41 @@ p {
   box-shadow: var(--shadow);
 }
 
+.about-feature {
+  align-items: center;
+  padding-top: clamp(58px, 8vw, 112px);
+  padding-bottom: clamp(58px, 8vw, 112px);
+}
+
+.about-feature + .about-feature {
+  padding-top: clamp(18px, 4vw, 42px);
+}
+
+.about-feature img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  background: #f4f4f4;
+}
+
+.about-feature h1 {
+  font-size: clamp(42px, 5vw, 74px);
+}
+
+.about-feature h2 {
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1;
+}
+
+.about-copy {
+  max-width: 540px;
+}
+
+.about-copy p:last-of-type {
+  color: var(--muted);
+  font-size: 17px;
+}
+
 .story-rail {
   grid-template-columns: repeat(3, 1fr);
   max-width: var(--content-max);
@@ -1323,7 +1518,7 @@ p {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 22px;
-  background: rgba(255, 253, 248, .86);
+  background: rgba(255, 255, 255, .94);
   box-shadow: var(--shadow);
 }
 
@@ -1450,6 +1645,7 @@ p {
   .spotlight,
   .product-hero,
   .about-hero,
+  .about-feature,
   .cart-layout,
   .configurator-toolbar,
   .bike-workbench,
@@ -1473,6 +1669,8 @@ p {
   }
 
   .category-showcase,
+  .story-card-grid,
+  .product-row,
   .story-rail,
   .spec-strip {
     grid-template-columns: 1fr;
@@ -1499,7 +1697,7 @@ p {
   }
 
   .search-icon,
-  .profile-icon {
+  .user-icon {
     display: none;
   }
 
@@ -1533,6 +1731,7 @@ p {
 
   .category-showcase,
   .bag-category-grid,
+  .bag-category-grid.compact,
   .option-grid.two,
   .option-grid.three,
   .image-band {

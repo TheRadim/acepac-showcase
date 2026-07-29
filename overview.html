@@ -22,9 +22,11 @@
         <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle><span data-lang-flag>EN</span></button>
         <button class="icon-button search-icon" aria-label="Search"></button>
-        <button class="icon-button profile-icon" aria-label="User profile"></button>
+        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle>
+          <img src="assets/flag-en.png" alt="English" data-lang-flag-img>
+        </button>
+        <button class="icon-button user-icon" aria-label="User profile"></button>
         <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
           <span class="cart-icon"></span>
           <span data-cart-count>0</span>
@@ -48,7 +50,7 @@
       <section class="page-kicker reveal">
         <p class="breadcrumb">Home / Products / Bikepacking bags</p>
         <h1>Choose bags on the bike, not beside it.</h1>
-        <p>Vyber typ kola, zvol barvu setu a klikej primo na pozice brasen. Product categories stay familiar, but the decision is visual.</p>
+        <p>Pick the bike, tune the frame color, then add or remove bags directly on the silhouette. Product categories stay familiar, but the decision is visual.</p>
       </section>
 
       <section class="configurator reveal" aria-label="Bike bag configurator">
@@ -69,40 +71,38 @@
             <div class="bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Selected bike silhouette"></div>
             <button class="bag-marker saddle" data-add-to-cart="saddle" aria-label="Add saddle bag"><span>+</span><em>Saddle</em></button>
             <button class="bag-marker top" data-add-to-cart="top" aria-label="Add fuel bag"><span>+</span><em>Fuel</em></button>
-            <button class="bag-marker frameM" data-add-to-cart="frameM" aria-label="Add frame bag M"><span>+</span><em>Frame M</em></button>
-            <button class="bag-marker frameXL" data-add-to-cart="frameXL" aria-label="Add frame bag XL"><span>+</span><em>Frame XL</em></button>
+            <button class="bag-marker frame" data-add-to-cart="frame" aria-label="Add frame bag"><span>+</span><em>Frame</em></button>
           </div>
 
           <aside class="setup-panel">
             <h3>Bag setup</h3>
-            <p>Choose a bike, then add or remove bags directly on the frame. The SVG layers carry the preview; the controls only decide what is visible.</p>
+            <p>Choose the bike first. Bag options stay compact, and the frame size only affects the frame bag layer.</p>
             <div class="setup-group bike-colour">
               <span>Bike colour</span>
               <label class="colour-slider">
-                <input type="range" min="76" max="96" value="88" data-bike-color-slider>
+                <input type="range" min="0" max="360" value="0" data-bike-color-slider>
                 <i aria-hidden="true"></i>
               </label>
             </div>
             <div class="setup-group">
-              <span>Color</span>
+              <span>Bag colour</span>
               <div class="choice-row" aria-label="Bag color">
                 <button class="active" data-setup-choice="color" data-value="Black" data-color="#111111">Black</button>
                 <button data-setup-choice="color" data-value="Grey" data-color="#77736c">Grey</button>
               </div>
             </div>
-            <div class="setup-group">
-              <span>Size</span>
-              <div class="choice-row" aria-label="Bag size">
-                <button data-setup-choice="size" data-value="M">M</button>
-                <button class="active" data-setup-choice="size" data-value="L">L</button>
-                <button data-setup-choice="size" data-value="XL">XL</button>
+            <div class="setup-group frame-size-group" data-frame-size-group>
+              <span>Frame bag size</span>
+              <div class="choice-row" aria-label="Frame bag size">
+                <button class="active" data-setup-choice="frameSize" data-value="M">M</button>
+                <button data-setup-choice="frameSize" data-value="XL">XL</button>
               </div>
             </div>
             <div class="setup-group">
               <span>Version</span>
               <div class="choice-row" aria-label="Bag version">
                 <button class="active" data-setup-choice="version" data-value="MKIII" data-price-delta="0">MKIII</button>
-                <button data-setup-choice="version" data-value="MKII" data-price-delta="-10">MKII - EUR 10</button>
+                <button data-setup-choice="version" data-value="MKII" data-price-delta="-10">MKII</button>
               </div>
             </div>
             <a class="button primary" href="product.html">Open Saddle Bag MKIII</a>
@@ -110,7 +110,7 @@
         </div>
       </section>
 
-      <section class="bag-category-grid" aria-label="Bag categories">
+      <section class="bag-category-grid compact" aria-label="Bag categories">
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2" alt="Saddle Bag MKIII" loading="lazy">
           <span>Saddle bags</span>
@@ -135,6 +135,39 @@
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1703_fuel-bag-l-mkiii-black--151306-1.jpg?ff=1&x=1024&y=768&q=85&ts=63dcd9b5&sg=161563f2" alt="Fuel Bag L MKIII" loading="lazy">
           <span>Top tube bags</span>
         </a>
+      </section>
+
+      <section class="product-row-section" aria-label="Bikepacking products">
+        <div class="section-heading-row reveal">
+          <p class="eyebrow red">Bikepacking bags</p>
+          <h2>Popular bags for the setup.</h2>
+        </div>
+        <div class="product-row">
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2" alt="Saddle Bag MKIII" loading="lazy">
+            <strong>Saddle Bag MKIII</strong>
+            <span>16 L rear storage</span>
+            <small>From EUR 97.27</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1769-6_zip-frame-bag-m-mkiii-black--159203-7.jpg?ff=1&x=1024&y=768&q=85&ts=63eb5604&sg=161563f2" alt="Zip Frame Bag M MKIII" loading="lazy">
+            <strong>Zip Frame Bag M</strong>
+            <span>Central frame storage</span>
+            <small>From EUR 55.07</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1703_fuel-bag-l-mkiii-black--151306-1.jpg?ff=1&x=1024&y=768&q=85&ts=63dcd9b5&sg=161563f2" alt="Fuel Bag MKIII" loading="lazy">
+            <strong>Fuel Bag MKIII</strong>
+            <span>Snack access on top tube</span>
+            <small>From EUR 40.58</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1682-12_bar-roll-grey--148023-3.png?ff=1&x=1024&y=768&q=85&ts=63da3f59&sg=161563f2" alt="Bar Roll MKIII" loading="lazy">
+            <strong>Bar Roll MKIII</strong>
+            <span>Front waterproof volume</span>
+            <small>From EUR 76.12</small>
+          </a>
+        </div>
       </section>
     </main>
 

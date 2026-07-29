@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ACEPAC Bikepacking Concept</title>
     <meta name="description" content="Modern ACEPAC showcase concept for bikepacking bags, configurator shopping, and product storytelling.">
+    <link rel="preload" href="assets/hero-trail.jpeg" as="image">
     <link rel="preload" href="assets/gravel.svg" as="image">
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -22,9 +23,11 @@
         <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle><span data-lang-flag>EN</span></button>
         <button class="icon-button search-icon" aria-label="Search"></button>
-        <button class="icon-button profile-icon" aria-label="User profile"></button>
+        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle>
+          <img src="assets/flag-en.png" alt="English" data-lang-flag-img>
+        </button>
+        <button class="icon-button user-icon" aria-label="User profile"></button>
         <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
           <span class="cart-icon"></span>
           <span data-cart-count>0</span>
@@ -57,7 +60,7 @@
             </div>
           </div>
           <a class="hero-bike reveal" href="overview.html" aria-label="Open bike bag configurator">
-            <div class="bike-svg hero-bike-svg" data-bike-inline data-static-bike="gravel" data="assets/gravel.svg" role="img" aria-label="Gravel bike silhouette"></div>
+            <div class="bike-svg hero-bike-svg" data-bike-inline data-static-bike="gravel" data-preview-bags="saddle,frameM,top" data="assets/gravel.svg" role="img" aria-label="Gravel bike silhouette with ACEPAC bags"></div>
           </a>
         </div>
       </section>
@@ -110,6 +113,42 @@
           <h2>Saddle Bag MKIII</h2>
           <p>Spacious 16 L saddle storage with a removable waterproof insert, shown in a modern product flow that makes options and setup effects obvious.</p>
           <a class="text-link" href="product.html">View product detail</a>
+        </div>
+      </section>
+
+      <section class="blog-stories" aria-label="Stories from ACEPAC">
+        <div class="section-heading-row reveal">
+          <p class="eyebrow red">ACEPAC journal</p>
+          <h2>Stories from the bikepacking world.</h2>
+        </div>
+        <div class="story-card-grid">
+          <article class="story-card reveal">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/slider_hp/Acepac-Ralsko-brezen-2024-59.jpg" alt="Loaded bike on forest trail" loading="lazy">
+            <div>
+              <h3>How to bikepacking</h3>
+              <time>18/08/2022</time>
+              <p>Bikepacking combines overnight freedom, cooking outside and cycling into more remote places with the load kept close to the bike.</p>
+              <a href="https://www.acepac.bike/en/blog/how-to-bikepacking/">Read more</a>
+            </div>
+          </article>
+          <article class="story-card reveal">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/onas1.jpg" alt="ACEPAC riders outdoors" loading="lazy">
+            <div>
+              <h3>Why bikepacking</h3>
+              <time>Since 2015</time>
+              <p>The original idea was simple: stay in the saddle longer, keep exploring after dusk, and make multi-day trail riding easier.</p>
+              <a href="about.html">Read more</a>
+            </div>
+          </article>
+          <article class="story-card reveal">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/documents/upload/clanky/o_nas/L1000225.jpg" alt="ACEPAC bag detail" loading="lazy">
+            <div>
+              <h3>Durability and repair</h3>
+              <time>Service mindset</time>
+              <p>ACEPAC frames sustainability around long product life, repairable sewn construction, replaceable components and lifetime defect support.</p>
+              <a href="about.html">Read more</a>
+            </div>
+          </article>
         </div>
       </section>
     </main>

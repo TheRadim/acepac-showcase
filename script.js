@@ -34,8 +34,7 @@ const MARKER_POSITIONS = {
   gravel: {
     saddle: [31, 16],
     top: [58, 21],
-    frameM: [56, 34],
-    frameXL: [51, 39]
+    frame: [53, 36]
   },
   mtb: {
     saddle: [36, 23],
@@ -44,21 +43,21 @@ const MARKER_POSITIONS = {
   road: {
     saddle: [33, 18],
     top: [59, 22],
-    frameM: [55, 34],
-    frameXL: [51, 39]
+    frame: [53, 36]
   }
 };
 
 const defaultSetup = {
   color: "Black",
   size: "L",
+  frameSize: "M",
   version: "MKIII",
   priceDelta: 0
 };
 
 const state = {
   bike: BIKE_IMAGES[localStorage.getItem("acepacBike")] ? localStorage.getItem("acepacBike") : "gravel",
-  bikeTone: Math.max(76, Number(localStorage.getItem("acepacBikeHue") || 88)),
+  bikeHue: Math.max(0, Math.min(360, Number(localStorage.getItem("acepacBikeHue") || 0))),
   lang: localStorage.getItem("acepacLang") || "en",
   setup: { ...defaultSetup },
   productConfig: { color: "Black", size: "L", version: "MKIII" },
@@ -71,8 +70,8 @@ function formatPrice(value) {
   return `EUR ${value.toFixed(2)}`;
 }
 
-function bikeColorFromTone(tone) {
-  return `hsl(0 0% ${tone}%)`;
+function bikeColorFromHue(hue) {
+  return Number(hue) === 0 ? "#dddddd" : `hsl(${hue} 48% 58%)`;
 }
 
 function readCart() {
@@ -94,17 +93,26 @@ function normalizeBagType(type) {
   return type;
 }
 
+function currentFrameType() {
+  return state.setup.frameSize === "XL" ? "frameXL" : "frameM";
+}
+
 function saveCart() {
   localStorage.setItem("acepacCart", JSON.stringify(state.cart));
 }
 
 function getCartItem(type) {
+  if (type === "frame") {
+    return state.cart.find((item) => item.type === "frameM" || item.type === "frameXL");
+  }
   return state.cart.find((item) => item.type === type);
 }
 
 function priceFor(item) {
   const product = BAG_PRODUCTS[item.type];
-  const sizeDelta = item.size === "M" ? -8 : item.size === "XL" ? 12 : 0;
+  const sizeDelta = item.type === "frameM" || item.type === "frameXL"
+    ? 0
+    : item.size === "M" ? -8 : item.size === "XL" ? 12 : 0;
   const versionDelta = item.version === "MKII" ? -10 : 0;
   return product.basePrice + sizeDelta + versionDelta + Number(item.priceDelta || 0);
 }
@@ -115,15 +123,18 @@ function cartTotal() {
 
 function addOrRemoveBag(type, source = "overview") {
   if (!isBagAllowed(type)) return;
-  const existingIndex = state.cart.findIndex((item) => item.type === type);
+  const resolvedType = type === "frame" ? currentFrameType() : type;
+  const existingIndex = type === "frame"
+    ? state.cart.findIndex((item) => item.type === "frameM" || item.type === "frameXL")
+    : state.cart.findIndex((item) => item.type === resolvedType);
   if (existingIndex >= 0) {
     state.cart.splice(existingIndex, 1);
   } else {
-    if (type === "frameM" || type === "frameXL") {
+    if (resolvedType === "frameM" || resolvedType === "frameXL") {
       state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameXL");
     }
     const config = source === "product" ? state.productConfig : state.setup;
-    state.cart.push({ type, ...config });
+    state.cart.push({ type: resolvedType, ...config, size: resolvedType === "frameXL" ? "XL" : config.size });
   }
   saveCart();
   renderCart();
@@ -146,13 +157,16 @@ function setBike(type) {
 }
 
 function isBagAllowed(type) {
+  if (type === "frame") {
+    return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(currentFrameType());
+  }
   return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(type);
 }
 
-function setBikeTone(tone) {
-  state.bikeTone = Number(tone);
-  localStorage.setItem("acepacBikeHue", String(state.bikeTone));
-  document.documentElement.style.setProperty("--bike-color", bikeColorFromTone(state.bikeTone));
+function setBikeHue(hue) {
+  state.bikeHue = Number(hue);
+  localStorage.setItem("acepacBikeHue", String(state.bikeHue));
+  document.documentElement.style.setProperty("--bike-color", bikeColorFromHue(state.bikeHue));
   renderSvgObjects();
 }
 
@@ -160,7 +174,7 @@ function renderBike() {
   const selected = BIKE_IMAGES[state.bike] || BIKE_IMAGES.gravel;
   const stage = document.querySelector("[data-bike-stage]");
   document.documentElement.style.setProperty("--bike-src", `url("${selected.src}")`);
-  document.documentElement.style.setProperty("--bike-color", bikeColorFromTone(state.bikeTone));
+  document.documentElement.style.setProperty("--bike-color", bikeColorFromHue(state.bikeHue));
 
   stage?.classList.add("is-switching");
   document.querySelectorAll("[data-bike-inline]").forEach((bikeNode) => {
@@ -211,7 +225,8 @@ function renderCart() {
       if (button.classList.contains("bag-marker")) {
         const symbol = button.querySelector("span");
         if (symbol) symbol.textContent = active ? "-" : "+";
-        button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${BAG_PRODUCTS[type]?.name || type}`);
+        const product = type === "frame" ? BAG_PRODUCTS[currentFrameType()] : BAG_PRODUCTS[type];
+        button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${product?.name || type}`);
       }
   });
 
@@ -223,7 +238,7 @@ function renderCart() {
             <div class="cart-item">
               <div>
                 <strong>${product.name}</strong>
-                <span>${item.color} / ${item.size} / ${item.version}</span>
+                <span>${item.color} / ${item.type === "frameM" ? "M" : item.type === "frameXL" ? "XL" : item.size} / ${item.version}</span>
               </div>
               <div>
                 <strong>${formatPrice(priceFor(item))}</strong>
@@ -269,28 +284,33 @@ async function loadInlineBike(bikeNode, src) {
 
 function applySvgState(bikeNode) {
   const bikeType = bikeNode.dataset.staticBike || state.bike;
+  const previewBags = bikeNode.dataset.previewBags
+    ? bikeNode.dataset.previewBags.split(",").map((item) => item.trim()).filter(Boolean)
+    : null;
 
   const bikeLayer = getSvgLayer(bikeNode, "bike");
   if (bikeLayer) {
-    bikeLayer.style.opacity = "1";
-    bikeLayer.style.filter = "grayscale(1) brightness(.28)";
+    bikeLayer.style.opacity = ".72";
+    bikeLayer.style.filter = "grayscale(1)";
   }
 
   ["bikecolor", "framecolor"].forEach((id) => {
     const layer = getSvgLayer(bikeNode, id);
     if (!layer) return;
     layer.style.display = id === BIKE_COLOR_LAYER[bikeType] ? "inline" : "none";
-    layer.setAttribute("fill", bikeColorFromTone(state.bikeTone));
+    layer.setAttribute("fill", bikeColorFromHue(state.bikeHue));
     layer.style.opacity = "1";
   });
 
   Object.entries(BAG_LAYER_IDS).forEach(([type, ids]) => {
-    const item = getCartItem(type);
+    const item = previewBags
+      ? previewBags.includes(type) ? { color: "Black" } : null
+      : getCartItem(type);
     ids.forEach((id) => {
       const layer = getSvgLayer(bikeNode, id);
       if (!layer) return;
       layer.style.display = item ? "inline" : "none";
-      layer.style.opacity = item ? ".72" : "0";
+      layer.style.opacity = item ? ".7" : "0";
       layer.style.filter = layerFilterFor(item);
       layer.style.pointerEvents = "none";
     });
@@ -310,7 +330,11 @@ function initLanguageToggle() {
     toggles.forEach((button) => {
       button.classList.toggle("cs", state.lang === "cs");
       button.classList.toggle("en", state.lang !== "cs");
-      button.querySelector("[data-lang-flag]").textContent = state.lang === "cs" ? "CZ" : "EN";
+      const flag = button.querySelector("[data-lang-flag-img]");
+      if (flag) {
+        flag.src = state.lang === "cs" ? "assets/flag-cz.png" : "assets/flag-en.png";
+        flag.alt = state.lang === "cs" ? "Cestina" : "English";
+      }
       button.setAttribute("aria-label", state.lang === "cs" ? "Prepnout do anglictiny" : "Switch to Czech");
     });
   };
@@ -373,8 +397,8 @@ function initCartDropdown() {
 function initConfigurator() {
   const bikeColorSlider = document.querySelector("[data-bike-color-slider]");
   if (bikeColorSlider) {
-    bikeColorSlider.value = String(state.bikeTone);
-    bikeColorSlider.addEventListener("input", () => setBikeTone(bikeColorSlider.value));
+    bikeColorSlider.value = String(state.bikeHue);
+    bikeColorSlider.addEventListener("input", () => setBikeHue(bikeColorSlider.value));
   }
 
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
@@ -387,6 +411,18 @@ function initConfigurator() {
       state.setup[key] = button.dataset.value;
       if (key === "version") {
         state.setup.priceDelta = Number(button.dataset.priceDelta || 0);
+      }
+      if (key === "frameSize") {
+        const existingFrame = getCartItem("frame");
+        if (existingFrame) {
+          state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameXL");
+          const nextType = currentFrameType();
+          state.cart.push({ ...existingFrame, type: nextType, frameSize: state.setup.frameSize, size: state.setup.frameSize });
+          saveCart();
+          renderCart();
+        } else {
+          renderSvgObjects();
+        }
       }
       document.querySelectorAll(`[data-setup-choice="${key}"]`).forEach((item) => {
         item.classList.toggle("active", item === button);
