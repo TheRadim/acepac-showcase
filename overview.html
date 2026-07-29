@@ -72,11 +72,6 @@
           <div class="control-block bike-colour">
             <span>Bike color</span>
             <div class="bike-colour-tools">
-              <div class="choice-row compact" aria-label="Base bike color">
-                <button data-bike-color-preset="#f2f2f2" data-bike-color-value="0">White</button>
-                <button data-bike-color-preset="#777777" data-bike-color-value="10">Grey</button>
-                <button data-bike-color-preset="#151515" data-bike-color-value="100">Black</button>
-              </div>
               <label class="colour-slider hue-slider">
                 <input type="range" min="0" max="100" value="10" data-bike-color-slider>
                 <i aria-hidden="true"></i>
@@ -114,9 +109,8 @@
             <div class="setup-group saddle-size-group" data-saddle-size-group hidden>
               <span>Size</span>
               <div class="choice-row" aria-label="Saddle bag size">
-                <button data-setup-choice="size" data-value="M">M</button>
-                <button class="active" data-setup-choice="size" data-value="L">L</button>
-                <button data-setup-choice="size" data-value="XL">XL</button>
+                <button data-setup-choice="size" data-value="8L">8L</button>
+                <button class="active" data-setup-choice="size" data-value="16L">16L</button>
               </div>
             </div>
             <div class="setup-group">
@@ -127,9 +121,8 @@
               </div>
             </div>
             <div class="setup-actions">
-              <button class="button primary wide" data-config-add-to-cart>Add to basket</button>
-              <button class="button secondary wide" data-config-remove-from-cart hidden>Remove from setup</button>
-              <a class="text-link" href="product.html" data-selected-product-link>Product detail</a>
+              <a class="button secondary" href="product.html" data-selected-product-link>Detail</a>
+              <button class="button primary" data-config-add-to-cart aria-label="Add selected bag to basket"><i class="bi bi-bag-plus" aria-hidden="true"></i><span>Add</span></button>
             </div>
           </aside>
         </div>

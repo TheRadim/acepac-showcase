@@ -70,7 +70,7 @@ const MARKER_POSITIONS = {
 
 const defaultSetup = {
   color: "Black",
-  size: "L",
+  size: "16L",
   frameSize: "M",
   version: "MKIII",
   priceDelta: 0
@@ -80,7 +80,8 @@ const state = {
   bike: BIKE_IMAGES[localStorage.getItem("acepacBike")] ? localStorage.getItem("acepacBike") : "gravel",
   bikeHue: Math.max(0, Math.min(100, Number(localStorage.getItem("acepacBikeHue") || 10))),
   bikeColor: localStorage.getItem("acepacBikeColor") || "#dddddd",
-  selectedBag: BAG_CONFIG[localStorage.getItem("acepacSelectedBag")] ? localStorage.getItem("acepacSelectedBag") : "frame",
+  selectedBag: null,
+  preview: [],
   lang: localStorage.getItem("acepacLang") || "en",
   setup: { ...defaultSetup },
   productConfig: { color: "Black", size: "L", version: "MKIII" },
@@ -102,9 +103,9 @@ function interpolateHex(start, end, ratio) {
 
 function bikeColorFromHue(value) {
   const point = Math.max(0, Math.min(100, Number(value)));
-  if (point <= 10) return interpolateHex("f2f2f2", "777777", point / 10);
-  if (point >= 90) return interpolateHex("7d44d7", "151515", (point - 90) / 10);
-  const hue = ((point - 10) / 80) * 300;
+  if (point <= 16) return interpolateHex("f2f2f2", "777777", point / 16);
+  if (point >= 88) return interpolateHex("7d44d7", "151515", (point - 88) / 12);
+  const hue = ((point - 16) / 72) * 300;
   return `hsl(${hue} 64% 50%)`;
 }
 
@@ -118,9 +119,6 @@ function setBikeColor(color, hue = null) {
   document.documentElement.style.setProperty("--bike-color", state.bikeColor);
   document.querySelectorAll("[data-bike-color-slider]").forEach((slider) => {
     if (hue !== null) slider.value = String(state.bikeHue);
-  });
-  document.querySelectorAll("[data-bike-color-preset]").forEach((button) => {
-    button.classList.toggle("active", button.dataset.bikeColorPreset === state.bikeColor);
   });
   renderSvgObjects();
 }
@@ -150,6 +148,7 @@ function currentFrameType() {
 }
 
 function currentSelectedType() {
+  if (!state.selectedBag) return null;
   if (state.selectedBag === "frame") return currentFrameType();
   return state.selectedBag;
 }
@@ -165,11 +164,33 @@ function getCartItem(type) {
   return state.cart.find((item) => item.type === type);
 }
 
+function getPreviewItem(type) {
+  if (type === "frame") {
+    return state.preview.find((item) => item.type === "frameM" || item.type === "frameL");
+  }
+  return state.preview.find((item) => item.type === type);
+}
+
+function previewTypeForItem(item) {
+  if (!item) return null;
+  return item.type === "frameM" || item.type === "frameL" ? "frame" : item.type;
+}
+
+function currentConfigItem() {
+  const resolvedType = currentSelectedType();
+  if (!resolvedType) return null;
+  return {
+    type: resolvedType,
+    ...state.setup,
+    size: resolvedType === "frameM" || resolvedType === "frameL" ? state.setup.frameSize : state.setup.size
+  };
+}
+
 function priceFor(item) {
   const product = BAG_PRODUCTS[item.type];
   const sizeDelta = item.type === "frameM" || item.type === "frameL"
     ? 0
-    : item.size === "M" ? -8 : item.size === "XL" ? 12 : 0;
+    : item.size === "8L" ? -8 : 0;
   const versionDelta = item.version === "MKII" ? -10 : 0;
   return product.basePrice + sizeDelta + versionDelta + Number(item.priceDelta || 0);
 }
@@ -199,12 +220,9 @@ function addOrRemoveBag(type, source = "overview") {
 
 function addConfiguredBag() {
   if (!isBagAllowed(state.selectedBag)) return;
-  const resolvedType = currentSelectedType();
-  const nextConfig = {
-    type: resolvedType,
-    ...state.setup,
-    size: resolvedType === "frameM" || resolvedType === "frameL" ? state.setup.frameSize : state.setup.size
-  };
+  const nextConfig = currentConfigItem();
+  if (!nextConfig) return;
+  const resolvedType = nextConfig.type;
   if (resolvedType === "frameM" || resolvedType === "frameL") {
     state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
   } else {
@@ -216,13 +234,15 @@ function addConfiguredBag() {
   renderConfiguratorPanel();
 }
 
-function removeSelectedBag() {
-  if (state.selectedBag === "frame") {
-    state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
+function removePreviewBag(type) {
+  if (!type) return;
+  if (type === "frame") {
+    state.preview = state.preview.filter((item) => item.type !== "frameM" && item.type !== "frameL");
   } else {
-    state.cart = state.cart.filter((item) => item.type !== state.selectedBag);
+    state.preview = state.preview.filter((item) => item.type !== type);
   }
-  saveCart();
+  const nextSelection = state.preview[0] ? previewTypeForItem(state.preview[0]) : null;
+  state.selectedBag = nextSelection;
   renderBike();
   renderCart();
   renderConfiguratorPanel();
@@ -236,24 +256,30 @@ function removeBag(type) {
 }
 
 function syncSelectedCartItem() {
-  if (!getCartItem(state.selectedBag)) {
-    renderSvgObjects();
-    return;
+  if (!state.selectedBag) return;
+  const updatedItem = currentConfigItem();
+  if (!updatedItem) return;
+
+  if (getPreviewItem(state.selectedBag)) {
+    if (state.selectedBag === "frame") {
+      state.preview = state.preview.filter((item) => item.type !== "frameM" && item.type !== "frameL");
+    } else {
+      state.preview = state.preview.filter((item) => item.type !== state.selectedBag);
+    }
+    state.preview.push(updatedItem);
   }
-  const resolvedType = currentSelectedType();
-  const updatedItem = {
-    type: resolvedType,
-    ...state.setup,
-    size: resolvedType === "frameM" || resolvedType === "frameL" ? state.setup.frameSize : state.setup.size
-  };
-  if (state.selectedBag === "frame") {
-    state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
-  } else {
-    state.cart = state.cart.filter((item) => item.type !== state.selectedBag);
+
+  if (getCartItem(state.selectedBag)) {
+    if (state.selectedBag === "frame") {
+      state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
+    } else {
+      state.cart = state.cart.filter((item) => item.type !== state.selectedBag);
+    }
+    state.cart.push(updatedItem);
+    saveCart();
+    renderCart();
   }
-  state.cart.push(updatedItem);
-  saveCart();
-  renderCart();
+  renderSvgObjects();
 }
 
 function setBike(type) {
@@ -261,9 +287,9 @@ function setBike(type) {
   state.bike = type;
   localStorage.setItem("acepacBike", type);
   state.cart = state.cart.filter((item) => isBagAllowed(item.type));
+  state.preview = state.preview.filter((item) => isBagAllowed(item.type));
   if (!isBagAllowed(state.selectedBag)) {
-    state.selectedBag = "saddle";
-    localStorage.setItem("acepacSelectedBag", state.selectedBag);
+    state.selectedBag = state.preview[0] ? previewTypeForItem(state.preview[0]) : null;
   }
   saveCart();
   renderBike();
@@ -272,6 +298,7 @@ function setBike(type) {
 }
 
 function isBagAllowed(type) {
+  if (!type) return false;
   if (type === "frame") {
     return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(currentFrameType());
   }
@@ -288,7 +315,22 @@ function setBikeHue(hue) {
 function setSelectedBag(type) {
   if (!BAG_CONFIG[type] || !isBagAllowed(type)) return;
   state.selectedBag = type;
-  localStorage.setItem("acepacSelectedBag", type);
+  renderBike();
+  renderCart();
+  renderConfiguratorPanel();
+}
+
+function addPreviewBag(type) {
+  if (!BAG_CONFIG[type] || !isBagAllowed(type)) return;
+  state.selectedBag = type;
+  const nextItem = currentConfigItem();
+  if (!nextItem) return;
+  if (type === "frame") {
+    state.preview = state.preview.filter((item) => item.type !== "frameM" && item.type !== "frameL");
+  } else {
+    state.preview = state.preview.filter((item) => item.type !== type);
+  }
+  state.preview.push(nextItem);
   renderBike();
   renderCart();
   renderConfiguratorPanel();
@@ -296,17 +338,14 @@ function setSelectedBag(type) {
 
 function renderBike() {
   const selected = BIKE_IMAGES[state.bike] || BIKE_IMAGES.gravel;
-  const stage = document.querySelector("[data-bike-stage]");
   document.documentElement.style.setProperty("--bike-src", `url("${selected.src}")`);
   document.documentElement.style.setProperty("--bike-color", state.bikeColor);
 
-  stage?.classList.add("is-switching");
   document.querySelectorAll("[data-bike-inline]").forEach((bikeNode) => {
     const nodeBike = bikeNode.dataset.staticBike || state.bike;
     const nodeImage = BIKE_IMAGES[nodeBike] || selected;
     loadInlineBike(bikeNode, nodeImage.src);
   });
-  window.setTimeout(() => stage?.classList.remove("is-switching"), 160);
 
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
     button.classList.toggle("active", button.dataset.bikeButton === state.bike);
@@ -351,12 +390,12 @@ function renderCart() {
 
   document.querySelectorAll("[data-select-bag]").forEach((button) => {
     const type = button.dataset.selectBag;
-    const active = Boolean(getCartItem(type));
+    const active = Boolean(getPreviewItem(type));
     button.classList.toggle("active", active);
     const symbol = button.querySelector("span");
     if (symbol) symbol.textContent = active ? "-" : "+";
     const product = type === "frame" ? BAG_PRODUCTS[currentFrameType()] : BAG_PRODUCTS[type];
-    button.setAttribute("aria-label", `${active && type === state.selectedBag ? "Remove" : "Select"} ${product?.name || type}`);
+    button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${product?.name || type}`);
   });
 
   document.querySelectorAll("[data-cart-items]").forEach((cartItems) => {
@@ -398,18 +437,9 @@ function layerOpacityFor(item) {
 }
 
 function previewItemFor(type, bikeNode) {
-  const cartItem = getCartItem(type);
-  if (cartItem) return cartItem;
   const isConfiguratorBike = Boolean(bikeNode.closest("[data-bike-stage]"));
-  const selectedType = currentSelectedType();
-  if (isConfiguratorBike && type === selectedType) {
-    return {
-      type,
-      ...state.setup,
-      size: type === "frameM" || type === "frameL" ? state.setup.frameSize : state.setup.size
-    };
-  }
-  return null;
+  if (isConfiguratorBike) return getPreviewItem(type);
+  return getCartItem(type);
 }
 
 function getSvgLayer(root, id) {
@@ -467,28 +497,36 @@ function applySvgState(bikeNode) {
 
 function renderConfiguratorPanel() {
   const config = BAG_CONFIG[state.selectedBag];
-  if (!config) return;
   const title = document.querySelector("[data-selected-bag-title]");
   const description = document.querySelector("[data-selected-bag-description]");
   const link = document.querySelector("[data-selected-product-link]");
   const button = document.querySelector("[data-config-add-to-cart]");
-  const removeButton = document.querySelector("[data-config-remove-from-cart]");
   const frameSizeGroup = document.querySelector("[data-frame-size-group]");
   const saddleSizeGroup = document.querySelector("[data-saddle-size-group]");
+  const optionGroups = document.querySelectorAll(".setup-panel .setup-group, .setup-panel .setup-actions");
+  if (!config) {
+    if (title) title.textContent = "Choose a bag position";
+    if (description) description.textContent = "Click a plus marker on the bike to add a bag to the visual setup, then configure the selected bag here.";
+    optionGroups.forEach((group) => {
+      group.hidden = true;
+    });
+    renderSvgObjects();
+    return;
+  }
   const resolvedType = currentSelectedType();
   const product = BAG_PRODUCTS[resolvedType];
   const inCart = Boolean(getCartItem(state.selectedBag));
 
+  optionGroups.forEach((group) => {
+    group.hidden = false;
+  });
   if (title) title.textContent = config.title;
   if (description) description.textContent = config.description;
-  if (link) link.textContent = config.detail;
+  if (link) link.textContent = "Detail";
   if (button) {
-    button.textContent = inCart ? "Update basket" : "Add to basket";
+    const label = button.querySelector("span");
+    if (label) label.textContent = inCart ? "Update" : "Add";
     button.disabled = !product;
-  }
-  if (removeButton) {
-    removeButton.hidden = !inCart;
-    removeButton.textContent = `Remove ${config.title}`;
   }
 
   if (frameSizeGroup) frameSizeGroup.hidden = config.sizeGroup !== "frame";
@@ -584,10 +622,6 @@ function initConfigurator() {
     bikeColorSlider.addEventListener("input", () => setBikeHue(bikeColorSlider.value));
   }
 
-  document.querySelectorAll("[data-bike-color-preset]").forEach((button) => {
-    button.addEventListener("click", () => setBikeColor(button.dataset.bikeColorPreset, button.dataset.bikeColorValue));
-  });
-
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
     button.addEventListener("click", () => setBike(button.dataset.bikeButton));
   });
@@ -595,11 +629,11 @@ function initConfigurator() {
   document.querySelectorAll("[data-select-bag]").forEach((button) => {
     button.addEventListener("click", () => {
       const type = button.dataset.selectBag;
-      if (type === state.selectedBag && getCartItem(type)) {
-        removeSelectedBag();
+      if (getPreviewItem(type)) {
+        removePreviewBag(type);
         return;
       }
-      setSelectedBag(type);
+      addPreviewBag(type);
     });
   });
 
@@ -624,13 +658,10 @@ function initConfigurator() {
   document.querySelectorAll("[data-config-add-to-cart]").forEach((button) => {
     button.addEventListener("click", () => {
       addConfiguredBag();
-      button.textContent = "Added";
+      const label = button.querySelector("span");
+      if (label) label.textContent = "Added";
       window.setTimeout(() => renderConfiguratorPanel(), 900);
     });
-  });
-
-  document.querySelectorAll("[data-config-remove-from-cart]").forEach((button) => {
-    button.addEventListener("click", () => removeSelectedBag());
   });
 
   document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
@@ -720,10 +751,6 @@ initConfigurator();
 initProductGallery();
 initOptions();
 initReveal();
-if (!isBagAllowed(state.selectedBag)) {
-  state.selectedBag = "saddle";
-  localStorage.setItem("acepacSelectedBag", state.selectedBag);
-}
 setBikeHue(state.bikeHue);
 renderBike();
 renderCart();
