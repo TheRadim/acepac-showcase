@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="cs">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bikepackingove brasny - ACEPAC koncept</title>
-    <meta name="description" content="Koncept bike-first konfiguratoru ACEPAC bikepackingovych brasen.">
+    <title>Bikepacking Bags - ACEPAC Concept</title>
+    <meta name="description" content="Bike-first ACEPAC bag configurator concept.">
     <link rel="preload" href="assets/gravel.svg" as="image">
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -15,69 +15,70 @@
       <a class="brand" href="index.html" aria-label="ACEPAC home">
         <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/logos/acepac_all_white-3.svg" alt="ACEPAC">
       </a>
-      <button class="menu-toggle" aria-label="Otevrit menu" aria-expanded="false" data-menu-toggle>Menu</button>
-      <nav class="main-nav" aria-label="Hlavni menu" data-nav>
-        <a href="overview.html">Bikepackingove brasny</a>
-        <a href="overview.html">Batohy</a>
-        <a href="overview.html">Obleceni</a>
-        <a href="overview.html">Doplnky</a>
-        <a href="about.html">O nas</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" data-menu-toggle>Menu</button>
+      <nav class="main-nav" aria-label="Main menu" data-nav>
+        <a href="overview.html">Bikepacking bags</a>
+        <a href="overview.html">Backpacks</a>
+        <a href="overview.html">Clothing</a>
+        <a href="overview.html">Accessories</a>
+        <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button class="icon-button" aria-label="Search"><i class="bi bi-search"></i></button>
+        <button class="icon-button" aria-label="Customer account"><i class="bi bi-person"></i></button>
         <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
           <i class="bi bi-bag"></i>
           <span data-cart-count>0</span>
         </button>
         <div class="cart-popover" data-cart-popover>
           <div class="cart-popover-head">
-            <strong>Tvuj setup</strong>
-            <button aria-label="Zavrit kosik" data-cart-close>Zavrit</button>
+            <strong>Your setup</strong>
+            <button aria-label="Close cart" data-cart-close>Close</button>
           </div>
           <div class="mini-stage">
             <div class="bike-svg mini-bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Cart bike preview"></div>
             <span class="cart-more" data-cart-more hidden></span>
           </div>
           <div class="cart-items" data-cart-items></div>
-          <a class="cart-checkout" href="cart.html">Prejit do kosiku</a>
+          <a class="cart-checkout" href="cart.html">Go to shopping cart</a>
         </div>
       </div>
-      <button class="lang-text-toggle" aria-label="Switch to English" data-lang-toggle data-lang-text>english</button>
+      <button class="lang-text-toggle" aria-label="Switch to Czech" data-lang-toggle data-lang-text>česky</button>
     </header>
 
     <main class="page-shell">
       <section class="page-kicker reveal">
-        <p class="breadcrumb">Domu / Produkty / Bikepackingove brasny</p>
-        <h1>Vyber brasny primo na kole, ne vedle nej.</h1>
-        <p>Vyber typ kola, dolad barvu ramu a potom klikni na pozici brasny primo v siluete. Kategorie zustavaji povedome, ale rozhodovani je vizualni.</p>
+        <p class="breadcrumb">Home / Products / Bikepacking bags</p>
+        <h1>Choose bags on the bike, not beside it.</h1>
+        <p>Pick the bike, tune the frame color, then click the bag position directly on the silhouette. Product categories stay familiar, but the decision is visual.</p>
       </section>
 
-      <section class="configurator reveal" aria-label="Konfigurator bikepackingovych brasen">
+      <section class="configurator reveal" aria-label="Bikepacking bag configurator">
         <div class="configurator-heading">
           <div>
-            <p class="eyebrow red">Konfigurator kola</p>
-            <h2>Sestav si setup</h2>
+            <p class="eyebrow red">Bike configurator</p>
+            <h2>Build your setup</h2>
           </div>
         </div>
 
         <div class="bike-control-strip">
           <div class="control-block bike-type-block">
-            <span>Typ kola</span>
-            <div class="segmented" role="tablist" aria-label="Typ kola">
+            <span>Bike type</span>
+            <div class="segmented" role="tablist" aria-label="Bike type">
               <button class="active" data-bike-button="gravel">Gravel</button>
               <button data-bike-button="mtb">MTB</button>
               <button data-bike-button="road">Road</button>
             </div>
           </div>
           <div class="control-block bike-colour">
-            <span>Barva kola</span>
+            <span>Bike color</span>
             <div class="bike-colour-tools">
-              <div class="choice-row compact" aria-label="Zakladni barva kola">
-                <button data-bike-color-preset="#f2f2f2">Bila</button>
-                <button data-bike-color-preset="#151515">Cerna</button>
+              <div class="choice-row compact" aria-label="Base bike color">
+                <button data-bike-color-preset="#f2f2f2" data-bike-color-value="0">White</button>
+                <button data-bike-color-preset="#777777" data-bike-color-value="10">Grey</button>
+                <button data-bike-color-preset="#151515" data-bike-color-value="100">Black</button>
               </div>
               <label class="colour-slider hue-slider">
-                <input type="range" min="0" max="360" value="0" data-bike-color-slider>
+                <input type="range" min="0" max="100" value="10" data-bike-color-slider>
                 <i aria-hidden="true"></i>
               </label>
             </div>
@@ -87,47 +88,48 @@
         <div class="bike-workbench">
           <div class="bike-stage" data-bike-stage>
             <div class="bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Selected bike silhouette"></div>
-            <button class="bag-marker saddle" data-select-bag="saddle" aria-label="Vybrat podsedlovou brasnu"><span>+</span><em>Saddle</em></button>
-            <button class="bag-marker top" data-select-bag="top" aria-label="Vybrat fuel bag"><span>+</span><em>Fuel</em></button>
-            <button class="bag-marker frame" data-select-bag="frame" aria-label="Vybrat ramovou brasnu"><span>+</span><em>Frame</em></button>
+            <button class="bag-marker saddle" data-select-bag="saddle" aria-label="Select saddle bag"><span>+</span><em>Saddle</em></button>
+            <button class="bag-marker top" data-select-bag="top" aria-label="Select fuel bag"><span>+</span><em>Fuel</em></button>
+            <button class="bag-marker frame" data-select-bag="frame" aria-label="Select frame bag"><span>+</span><em>Frame</em></button>
           </div>
 
           <aside class="setup-panel">
-            <p class="eyebrow red" data-selected-bag-kicker>Vybrana brasna</p>
-            <h3 data-selected-bag-title>Ramova brasna</h3>
-            <p data-selected-bag-description>Stredova brasna vyuzije hlavni trojuhelnik a drzi hmotnost nizko.</p>
+            <p class="eyebrow red" data-selected-bag-kicker>Selected bag</p>
+            <h3 data-selected-bag-title>Frame bag</h3>
+            <p data-selected-bag-description>Central frame storage uses the main triangle and keeps weight low.</p>
             <div class="setup-group">
-              <span>Barva brasny</span>
-              <div class="choice-row" aria-label="Barva brasny">
-                <button class="active" data-setup-choice="color" data-value="Black" data-color="#111111">Cerna</button>
-                <button data-setup-choice="color" data-value="Grey" data-color="#77736c">Seda</button>
+              <span>Bag color</span>
+              <div class="choice-row" aria-label="Bag color">
+                <button class="active" data-setup-choice="color" data-value="Black" data-color="#111111">Black</button>
+                <button data-setup-choice="color" data-value="Grey" data-color="#77736c">Grey</button>
               </div>
             </div>
             <div class="setup-group frame-size-group" data-frame-size-group>
-              <span>Velikost ramove brasny</span>
-              <div class="choice-row" aria-label="Velikost ramove brasny">
+              <span>Frame bag size</span>
+              <div class="choice-row" aria-label="Frame bag size">
                 <button class="active" data-setup-choice="frameSize" data-value="M">M</button>
                 <button data-setup-choice="frameSize" data-value="L">L</button>
               </div>
             </div>
             <div class="setup-group saddle-size-group" data-saddle-size-group hidden>
-              <span>Velikost</span>
-              <div class="choice-row" aria-label="Velikost podsedlove brasny">
+              <span>Size</span>
+              <div class="choice-row" aria-label="Saddle bag size">
                 <button data-setup-choice="size" data-value="M">M</button>
                 <button class="active" data-setup-choice="size" data-value="L">L</button>
                 <button data-setup-choice="size" data-value="XL">XL</button>
               </div>
             </div>
             <div class="setup-group">
-              <span>Generace</span>
-              <div class="choice-row" aria-label="Generace brasny">
+              <span>Generation</span>
+              <div class="choice-row" aria-label="Bag generation">
                 <button class="active" data-setup-choice="version" data-value="MKIII" data-price-delta="0">MKIII</button>
                 <button data-setup-choice="version" data-value="MKII" data-price-delta="-10">MKII</button>
               </div>
             </div>
             <div class="setup-actions">
-              <button class="button primary wide" data-config-add-to-cart>Pridat do kosiku</button>
-              <a class="text-link" href="product.html" data-selected-product-link>Detail produktu</a>
+              <button class="button primary wide" data-config-add-to-cart>Add to basket</button>
+              <button class="button secondary wide" data-config-remove-from-cart hidden>Remove from setup</button>
+              <a class="text-link" href="product.html" data-selected-product-link>Product detail</a>
             </div>
           </aside>
         </div>
@@ -136,59 +138,96 @@
       <section class="bag-category-grid compact" aria-label="Bag categories">
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2" alt="Saddle Bag MKIII" loading="lazy">
-          <span>Podsedlove brasny</span>
+          <span>Saddle bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1682-12_bar-roll-grey--148023-3.png?ff=1&x=1024&y=768&q=85&ts=63da3f59&sg=161563f2" alt="Bar Roll MKIII" loading="lazy">
-          <span>Riditkove brasny</span>
+          <span>Handlebar bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1769-6_zip-frame-bag-m-mkiii-black--159203-7.jpg?ff=1&x=1024&y=768&q=85&ts=63eb5604&sg=161563f2" alt="Zip Frame Bag M MKIII" loading="lazy">
-          <span>Ramove brasny</span>
+          <span>Frame bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1721-7_minima-bag-grey--152020-3.jpg?ff=1&x=1024&y=768&q=85&ts=63dcee3e&sg=161563f2" alt="Minima Bag MKIII" loading="lazy">
-          <span>Brasny na vareni</span>
+          <span>Cookware bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1751-2_tool-wallet-mkiii-grey--156028-2.jpg?ff=1&x=1024&y=768&q=85&ts=63eb322f&sg=161563f2" alt="Tool Wallet MKIII" loading="lazy">
-          <span>Naradove brasny</span>
+          <span>Tool bags</span>
         </a>
         <a href="product.html" class="bag-category reveal">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1703_fuel-bag-l-mkiii-black--151306-1.jpg?ff=1&x=1024&y=768&q=85&ts=63dcd9b5&sg=161563f2" alt="Fuel Bag L MKIII" loading="lazy">
-          <span>Fuel bagy</span>
+          <span>Fuel bags</span>
         </a>
       </section>
 
       <section class="product-row-section" aria-label="Bikepacking products">
         <div class="section-heading-row reveal">
-          <p class="eyebrow red">Bikepackingove brasny</p>
-          <h2>Oblibene brasny do setu.</h2>
+          <p class="eyebrow red">Bikepacking bags</p>
+          <h2>Popular bags for the setup.</h2>
+        </div>
+        <div class="catalog-toolbar reveal" aria-label="Catalogue filters">
+          <label class="catalog-search">
+            <i class="bi bi-search" aria-hidden="true"></i>
+            <input type="search" placeholder="Search bags, systems, volumes...">
+          </label>
+          <div class="filter-chips" aria-label="Filters">
+            <button>Price</button>
+            <button>Color</button>
+            <button>Size</button>
+            <button>Availability</button>
+            <button>Bike type</button>
+          </div>
         </div>
         <div class="product-row">
           <a class="product-tile reveal" href="product.html">
             <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1724-40_saddle-bag-grey2.jpg?ff=1&x=1024&y=768&q=85&ts=6a105beb&sg=161563f2" alt="Saddle Bag MKIII" loading="lazy">
             <strong>Saddle Bag MKIII</strong>
-            <span>16 L ulozny prostor vzadu</span>
-            <small>Od EUR 97.27</small>
+            <span>16 L rear storage</span>
+            <small>From EUR 97.27</small>
           </a>
           <a class="product-tile reveal" href="product.html">
             <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1769-6_zip-frame-bag-m-mkiii-black--159203-7.jpg?ff=1&x=1024&y=768&q=85&ts=63eb5604&sg=161563f2" alt="Zip Frame Bag M MKIII" loading="lazy">
             <strong>Zip Frame Bag M</strong>
-            <span>Ulozeni v hlavnim ramu</span>
-            <small>Od EUR 55.07</small>
+            <span>Central frame storage</span>
+            <small>From EUR 55.07</small>
           </a>
           <a class="product-tile reveal" href="product.html">
             <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1703_fuel-bag-l-mkiii-black--151306-1.jpg?ff=1&x=1024&y=768&q=85&ts=63dcd9b5&sg=161563f2" alt="Fuel Bag MKIII" loading="lazy">
             <strong>Fuel Bag MKIII</strong>
-            <span>Rychly pristup na horni trubce</span>
-            <small>Od EUR 40.58</small>
+            <span>Fast access on the top tube</span>
+            <small>From EUR 40.58</small>
           </a>
           <a class="product-tile reveal" href="product.html">
             <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1682-12_bar-roll-grey--148023-3.png?ff=1&x=1024&y=768&q=85&ts=63da3f59&sg=161563f2" alt="Bar Roll MKIII" loading="lazy">
             <strong>Bar Roll MKIII</strong>
-            <span>Predni vodotesny objem</span>
-            <small>Od EUR 76.12</small>
+            <span>Front waterproof volume</span>
+            <small>From EUR 76.12</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1721-7_minima-bag-grey--152020-3.jpg?ff=1&x=1024&y=768&q=85&ts=63dcee3e&sg=161563f2" alt="Minima Bag MKIII" loading="lazy">
+            <strong>Minima Bag MKIII</strong>
+            <span>Compact cooking kit storage</span>
+            <small>From EUR 34.90</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1751-2_tool-wallet-mkiii-grey--156028-2.jpg?ff=1&x=1024&y=768&q=85&ts=63eb322f&sg=161563f2" alt="Tool Wallet MKIII" loading="lazy">
+            <strong>Tool Wallet MKIII</strong>
+            <span>Service kit storage</span>
+            <small>From EUR 24.80</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1682-12_bar-roll-grey--148023-3.png?ff=1&x=1024&y=768&q=85&ts=63da3f59&sg=161563f2" alt="Bar Harness MKIII" loading="lazy">
+            <strong>Bar Harness MKIII</strong>
+            <span>Stable front carry platform</span>
+            <small>From EUR 49.90</small>
+          </a>
+          <a class="product-tile reveal" href="product.html">
+            <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/shop/big/1712-6_fuel-bag-m-mkiii-grey--151318-2.jpg?ff=1&x=1024&y=768&q=85&ts=63dcdb60&sg=161563f2" alt="Fuel Bag M MKIII" loading="lazy">
+            <strong>Fuel Bag M MKIII</strong>
+            <span>Smaller top tube storage</span>
+            <small>From EUR 36.10</small>
           </a>
         </div>
       </section>
