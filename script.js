@@ -176,6 +176,29 @@ function previewTypeForItem(item) {
   return item.type === "frameM" || item.type === "frameL" ? "frame" : item.type;
 }
 
+function applySetupFromItem(item) {
+  if (!item) return;
+  state.setup.color = item.color || defaultSetup.color;
+  state.setup.version = item.version || defaultSetup.version;
+  state.setup.priceDelta = Number(item.priceDelta || 0);
+  if (item.type === "frameM" || item.type === "frameL") {
+    state.setup.frameSize = item.type === "frameL" ? "L" : "M";
+  } else {
+    state.setup.size = item.size || defaultSetup.size;
+  }
+}
+
+function selectPreviewBag(type) {
+  if (!BAG_CONFIG[type] || !isBagAllowed(type)) return;
+  const item = getPreviewItem(type);
+  if (!item) return;
+  state.selectedBag = type;
+  applySetupFromItem(item);
+  renderBike();
+  renderCart();
+  renderConfiguratorPanel();
+}
+
 function currentConfigItem() {
   const resolvedType = currentSelectedType();
   if (!resolvedType) return null;
@@ -241,8 +264,9 @@ function removePreviewBag(type) {
   } else {
     state.preview = state.preview.filter((item) => item.type !== type);
   }
-  const nextSelection = state.preview[0] ? previewTypeForItem(state.preview[0]) : null;
-  state.selectedBag = nextSelection;
+  const nextItem = state.preview[0] || null;
+  state.selectedBag = previewTypeForItem(nextItem);
+  applySetupFromItem(nextItem);
   renderBike();
   renderCart();
   renderConfiguratorPanel();
@@ -315,6 +339,7 @@ function setBikeHue(hue) {
 function setSelectedBag(type) {
   if (!BAG_CONFIG[type] || !isBagAllowed(type)) return;
   state.selectedBag = type;
+  applySetupFromItem(getPreviewItem(type));
   renderBike();
   renderCart();
   renderConfiguratorPanel();
@@ -334,6 +359,53 @@ function addPreviewBag(type) {
   renderBike();
   renderCart();
   renderConfiguratorPanel();
+}
+
+function previewSummary(item) {
+  const displayType = previewTypeForItem(item);
+  const size = item.type === "frameM" ? "M" : item.type === "frameL" ? "L" : item.size;
+  return {
+    type: displayType,
+    title: BAG_CONFIG[displayType]?.title || BAG_PRODUCTS[item.type]?.name || "Bag",
+    meta: [item.color, size, item.version].filter(Boolean).join(" / "),
+    inCart: Boolean(getCartItem(displayType))
+  };
+}
+
+function renderPreviewList() {
+  document.querySelectorAll("[data-preview-list]").forEach((list) => {
+    if (!state.preview.length) {
+      list.innerHTML = `
+        <div class="setup-list-empty">
+          <strong>No bags on the bike yet</strong>
+          <span>Use the plus markers to add bags to the setup.</span>
+        </div>
+      `;
+      return;
+    }
+
+    list.innerHTML = `
+      <div class="setup-list-head">
+        <span>On this bike</span>
+        <small>${state.preview.length} ${state.preview.length === 1 ? "bag" : "bags"}</small>
+      </div>
+      <div class="setup-list-items">
+        ${state.preview.map((item) => {
+          const summary = previewSummary(item);
+          const active = summary.type === state.selectedBag;
+          return `
+            <button class="setup-list-item${active ? " active" : ""}" data-preview-select="${summary.type}">
+              <span>
+                <strong>${summary.title}</strong>
+                <small>${summary.meta}</small>
+              </span>
+              ${summary.inCart ? "<em>In basket</em>" : ""}
+            </button>
+          `;
+        }).join("")}
+      </div>
+    `;
+  });
 }
 
 function renderBike() {
@@ -363,6 +435,7 @@ function renderBike() {
       button.style.setProperty("--marker-top", `${top}%`);
     }
   });
+  renderPreviewList();
 }
 
 function renderCart() {
@@ -424,6 +497,7 @@ function renderCart() {
       removeBag(button.dataset.removeBag);
     });
   });
+  renderPreviewList();
 }
 
 function layerFilterFor(item) {
@@ -635,6 +709,13 @@ function initConfigurator() {
       }
       addPreviewBag(type);
     });
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target instanceof Element ? event.target : event.target.parentElement;
+    const previewButton = target?.closest("[data-preview-select]");
+    if (!previewButton) return;
+    selectPreviewBag(previewButton.dataset.previewSelect);
   });
 
   document.querySelectorAll("[data-setup-choice]").forEach((button) => {

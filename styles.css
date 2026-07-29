@@ -789,6 +789,14 @@ p {
   align-items: start;
 }
 
+.bike-preview-column {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 860px;
+  justify-self: center;
+}
+
 .bike-stage,
 .mini-stage {
   position: relative;
@@ -802,6 +810,92 @@ p {
   width: 100%;
   max-width: 860px;
   justify-self: center;
+}
+
+.setup-list {
+  display: grid;
+  gap: 10px;
+}
+
+.setup-list-head,
+.setup-list-empty,
+.setup-list-items {
+  display: grid;
+}
+
+.setup-list-head {
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.setup-list-head small {
+  color: var(--ink);
+  font-size: 11px;
+}
+
+.setup-list-items {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.setup-list-item,
+.setup-list-empty {
+  min-height: 64px;
+  border: 0;
+  border-left: 3px solid transparent;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: #f4f4f4;
+  text-align: left;
+  transition: transform .2s ease, background .2s ease, border-color .2s ease;
+}
+
+.setup-list-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.setup-list-item:hover {
+  background: #eeeeee;
+  transform: translateY(-4px);
+}
+
+.setup-list-item.active {
+  border-color: var(--accent);
+  background: #f0f0f0;
+}
+
+.setup-list-item strong,
+.setup-list-empty strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.setup-list-item small,
+.setup-list-empty span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.setup-list-item em {
+  align-self: center;
+  color: var(--accent);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+  letter-spacing: .04em;
+  text-transform: uppercase;
 }
 
 .bike-svg {
@@ -1943,6 +2037,10 @@ p {
 
   .bike-stage {
     margin-inline: -8px;
+  }
+
+  .setup-list-items {
+    grid-template-columns: 1fr;
   }
 
   .bag-marker em {
