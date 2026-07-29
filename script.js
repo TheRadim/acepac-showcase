@@ -6,10 +6,47 @@ const BIKE_IMAGES = {
 
 const BAG_PRODUCTS = {
   saddle: { name: "Saddle Bag MKIII", basePrice: 97.27 },
-  frame: { name: "Zip Frame Bag MKIII", basePrice: 55.07 },
-  handlebar: { name: "Bar Roll MKIII", basePrice: 74.53 },
-  top: { name: "Fuel Bag MKIII", basePrice: 40.58 },
-  tool: { name: "Tool Wallet MKIII", basePrice: 19.46 }
+  frameM: { name: "Zip Frame Bag M MKIII", basePrice: 55.07 },
+  frameXL: { name: "Zip Frame Bag XL MKIII", basePrice: 67.07 },
+  top: { name: "Fuel Bag MKIII", basePrice: 40.58 }
+};
+
+const BIKE_COLOR_LAYER = {
+  gravel: "bikecolor",
+  mtb: "framecolor",
+  road: "framecolor"
+};
+
+const BIKE_ALLOWED_BAGS = {
+  gravel: ["saddle", "top", "frameM", "frameXL"],
+  mtb: ["saddle", "top"],
+  road: ["saddle", "top", "frameM", "frameXL"]
+};
+
+const BAG_LAYER_IDS = {
+  saddle: ["Saddlebag", "Saddlebag-copy"],
+  top: ["toptube", "toptube-copy"],
+  frameM: ["framebagM", "framebagM-copy"],
+  frameXL: ["framebagXL", "framebagXL-copy"]
+};
+
+const MARKER_POSITIONS = {
+  gravel: {
+    saddle: [31, 16],
+    top: [58, 21],
+    frameM: [56, 34],
+    frameXL: [51, 39]
+  },
+  mtb: {
+    saddle: [36, 23],
+    top: [58, 22]
+  },
+  road: {
+    saddle: [33, 18],
+    top: [59, 22],
+    frameM: [55, 34],
+    frameXL: [51, 39]
+  }
 };
 
 const defaultSetup = {
@@ -21,19 +58,21 @@ const defaultSetup = {
 
 const state = {
   bike: BIKE_IMAGES[localStorage.getItem("acepacBike")] ? localStorage.getItem("acepacBike") : "gravel",
-  bikeHue: Number(localStorage.getItem("acepacBikeHue") || 8),
+  bikeTone: Math.max(76, Number(localStorage.getItem("acepacBikeHue") || 88)),
   lang: localStorage.getItem("acepacLang") || "en",
   setup: { ...defaultSetup },
   productConfig: { color: "Black", size: "L", version: "MKIII" },
   cart: readCart()
 };
 
+const svgCache = new Map();
+
 function formatPrice(value) {
   return `EUR ${value.toFixed(2)}`;
 }
 
-function bikeColorFromHue(hue) {
-  return `hsl(${hue} 58% 34%)`;
+function bikeColorFromTone(tone) {
+  return `hsl(0 0% ${tone}%)`;
 }
 
 function readCart() {
@@ -41,13 +80,18 @@ function readCart() {
     const stored = JSON.parse(localStorage.getItem("acepacCart")) || [];
     return stored.map((item) => {
       if (typeof item === "string") {
-        return { type: item, ...defaultSetup, priceDelta: 0 };
+        return { type: normalizeBagType(item), ...defaultSetup, priceDelta: 0 };
       }
-      return { ...defaultSetup, priceDelta: 0, ...item };
+      return { ...defaultSetup, priceDelta: 0, ...item, type: normalizeBagType(item.type) };
     }).filter((item) => BAG_PRODUCTS[item.type]);
   } catch {
     return [];
   }
+}
+
+function normalizeBagType(type) {
+  if (type === "frame") return "frameM";
+  return type;
 }
 
 function saveCart() {
@@ -70,10 +114,14 @@ function cartTotal() {
 }
 
 function addOrRemoveBag(type, source = "overview") {
+  if (!isBagAllowed(type)) return;
   const existingIndex = state.cart.findIndex((item) => item.type === type);
   if (existingIndex >= 0) {
     state.cart.splice(existingIndex, 1);
   } else {
+    if (type === "frameM" || type === "frameXL") {
+      state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameXL");
+    }
     const config = source === "product" ? state.productConfig : state.setup;
     state.cart.push({ type, ...config });
   }
@@ -91,38 +139,51 @@ function setBike(type) {
   if (!BIKE_IMAGES[type]) return;
   state.bike = type;
   localStorage.setItem("acepacBike", type);
+  state.cart = state.cart.filter((item) => isBagAllowed(item.type));
+  saveCart();
   renderBike();
+  renderCart();
 }
 
-function setBikeHue(hue) {
-  state.bikeHue = Number(hue);
-  localStorage.setItem("acepacBikeHue", String(state.bikeHue));
-  document.documentElement.style.setProperty("--bike-color", bikeColorFromHue(state.bikeHue));
+function isBagAllowed(type) {
+  return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(type);
+}
+
+function setBikeTone(tone) {
+  state.bikeTone = Number(tone);
+  localStorage.setItem("acepacBikeHue", String(state.bikeTone));
+  document.documentElement.style.setProperty("--bike-color", bikeColorFromTone(state.bikeTone));
+  renderSvgObjects();
 }
 
 function renderBike() {
   const selected = BIKE_IMAGES[state.bike] || BIKE_IMAGES.gravel;
   const stage = document.querySelector("[data-bike-stage]");
-  const bikeImage = document.querySelector("[data-bike-image]");
   document.documentElement.style.setProperty("--bike-src", `url("${selected.src}")`);
-  document.documentElement.style.setProperty("--bike-color", bikeColorFromHue(state.bikeHue));
+  document.documentElement.style.setProperty("--bike-color", bikeColorFromTone(state.bikeTone));
 
-  if (bikeImage) {
-    stage?.classList.add("is-switching");
-    window.setTimeout(() => {
-      bikeImage.src = selected.src;
-      bikeImage.alt = selected.alt;
-      stage?.classList.remove("is-switching");
-    }, 120);
-  }
-
-  document.querySelectorAll("[data-mini-bike]").forEach((miniBike) => {
-    miniBike.src = selected.src;
-    miniBike.alt = selected.alt;
+  stage?.classList.add("is-switching");
+  document.querySelectorAll("[data-bike-inline]").forEach((bikeNode) => {
+    const nodeBike = bikeNode.dataset.staticBike || state.bike;
+    const nodeImage = BIKE_IMAGES[nodeBike] || selected;
+    loadInlineBike(bikeNode, nodeImage.src);
   });
+  window.setTimeout(() => stage?.classList.remove("is-switching"), 160);
 
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
     button.classList.toggle("active", button.dataset.bikeButton === state.bike);
+  });
+
+  document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
+    const type = button.dataset.addToCart;
+    const allowed = isBagAllowed(type);
+    button.hidden = !allowed;
+    button.disabled = !allowed;
+    if (allowed && MARKER_POSITIONS[state.bike]?.[type]) {
+      const [left, top] = MARKER_POSITIONS[state.bike][type];
+      button.style.setProperty("--marker-left", `${left}%`);
+      button.style.setProperty("--marker-top", `${top}%`);
+    }
   });
 }
 
@@ -131,10 +192,7 @@ function renderCart() {
     node.textContent = String(state.cart.length);
   });
 
-  document.querySelectorAll("[data-bag-overlay], [data-mini-overlay]").forEach((overlay) => {
-    const type = overlay.dataset.bagOverlay || overlay.dataset.miniOverlay;
-    overlay.classList.toggle("active", Boolean(getCartItem(type)));
-  });
+  renderSvgObjects();
 
   document.querySelectorAll("[data-cart-more]").forEach((node) => {
     const extra = Math.max(0, state.cart.length - 3);
@@ -149,12 +207,12 @@ function renderCart() {
   document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
     const type = button.dataset.addToCart;
     const active = Boolean(getCartItem(type));
-    button.classList.toggle("active", active);
-    if (button.classList.contains("bag-marker")) {
-      const symbol = button.querySelector("span");
-      if (symbol) symbol.textContent = active ? "-" : "+";
-      button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${type} bag`);
-    }
+      button.classList.toggle("active", active);
+      if (button.classList.contains("bag-marker")) {
+        const symbol = button.querySelector("span");
+        if (symbol) symbol.textContent = active ? "-" : "+";
+        button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${BAG_PRODUCTS[type]?.name || type}`);
+      }
   });
 
   document.querySelectorAll("[data-cart-items]").forEach((cartItems) => {
@@ -178,8 +236,69 @@ function renderCart() {
   });
 
   document.querySelectorAll("[data-remove-bag]").forEach((button) => {
-    button.addEventListener("click", () => removeBag(button.dataset.removeBag));
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+      removeBag(button.dataset.removeBag);
+    });
   });
+}
+
+function layerFilterFor(item) {
+  return item?.color === "Grey"
+    ? "grayscale(1) brightness(1.45) contrast(.72)"
+    : "none";
+}
+
+function getSvgLayer(root, id) {
+  return root.querySelector(`[id="${id}"]`);
+}
+
+async function loadInlineBike(bikeNode, src) {
+  if (bikeNode.dataset.loadedSrc !== src) {
+    bikeNode.classList.remove("is-ready");
+    if (!svgCache.has(src)) {
+      const response = await fetch(src);
+      svgCache.set(src, await response.text());
+    }
+    bikeNode.innerHTML = svgCache.get(src);
+    bikeNode.dataset.loadedSrc = src;
+  }
+  applySvgState(bikeNode);
+  bikeNode.classList.add("is-ready");
+}
+
+function applySvgState(bikeNode) {
+  const bikeType = bikeNode.dataset.staticBike || state.bike;
+
+  const bikeLayer = getSvgLayer(bikeNode, "bike");
+  if (bikeLayer) {
+    bikeLayer.style.opacity = "1";
+    bikeLayer.style.filter = "grayscale(1) brightness(.28)";
+  }
+
+  ["bikecolor", "framecolor"].forEach((id) => {
+    const layer = getSvgLayer(bikeNode, id);
+    if (!layer) return;
+    layer.style.display = id === BIKE_COLOR_LAYER[bikeType] ? "inline" : "none";
+    layer.setAttribute("fill", bikeColorFromTone(state.bikeTone));
+    layer.style.opacity = "1";
+  });
+
+  Object.entries(BAG_LAYER_IDS).forEach(([type, ids]) => {
+    const item = getCartItem(type);
+    ids.forEach((id) => {
+      const layer = getSvgLayer(bikeNode, id);
+      if (!layer) return;
+      layer.style.display = item ? "inline" : "none";
+      layer.style.opacity = item ? ".72" : "0";
+      layer.style.filter = layerFilterFor(item);
+      layer.style.pointerEvents = "none";
+    });
+  });
+}
+
+function renderSvgObjects() {
+  document.querySelectorAll("[data-bike-inline]").forEach((bikeNode) => applySvgState(bikeNode));
 }
 
 function initLanguageToggle() {
@@ -254,8 +373,8 @@ function initCartDropdown() {
 function initConfigurator() {
   const bikeColorSlider = document.querySelector("[data-bike-color-slider]");
   if (bikeColorSlider) {
-    bikeColorSlider.value = String(state.bikeHue);
-    bikeColorSlider.addEventListener("input", () => setBikeHue(bikeColorSlider.value));
+    bikeColorSlider.value = String(state.bikeTone);
+    bikeColorSlider.addEventListener("input", () => setBikeTone(bikeColorSlider.value));
   }
 
   document.querySelectorAll("[data-bike-button]").forEach((button) => {

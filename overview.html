@@ -35,12 +35,7 @@
             <button aria-label="Close cart" data-cart-close>Close</button>
           </div>
           <div class="mini-stage">
-            <img data-mini-bike src="assets/gravel.svg" alt="Cart bike preview">
-            <div class="bag-overlay saddle" data-mini-overlay="saddle"></div>
-            <div class="bag-overlay frame" data-mini-overlay="frame"></div>
-            <div class="bag-overlay handlebar" data-mini-overlay="handlebar"></div>
-            <div class="bag-overlay top" data-mini-overlay="top"></div>
-            <div class="bag-overlay tool" data-mini-overlay="tool"></div>
+            <div class="bike-svg mini-bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Cart bike preview"></div>
             <span class="cart-more" data-cart-more hidden></span>
           </div>
           <div class="cart-items" data-cart-items></div>
@@ -71,26 +66,20 @@
 
         <div class="bike-workbench">
           <div class="bike-stage" data-bike-stage>
-            <img data-bike-image src="assets/gravel.svg" alt="Selected bike silhouette">
+            <div class="bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Selected bike silhouette"></div>
             <button class="bag-marker saddle" data-add-to-cart="saddle" aria-label="Add saddle bag"><span>+</span><em>Saddle</em></button>
-            <button class="bag-marker frame" data-add-to-cart="frame" aria-label="Add frame bag"><span>+</span><em>Frame</em></button>
-            <button class="bag-marker handlebar" data-add-to-cart="handlebar" aria-label="Add handlebar bag"><span>+</span><em>Bar</em></button>
-            <button class="bag-marker top" data-add-to-cart="top" aria-label="Add top tube bag"><span>+</span><em>Top tube</em></button>
-            <button class="bag-marker tool" data-add-to-cart="tool" aria-label="Add tool bag"><span>+</span><em>Tool</em></button>
-            <div class="bag-overlay saddle" data-bag-overlay="saddle"></div>
-            <div class="bag-overlay frame" data-bag-overlay="frame"></div>
-            <div class="bag-overlay handlebar" data-bag-overlay="handlebar"></div>
-            <div class="bag-overlay top" data-bag-overlay="top"></div>
-            <div class="bag-overlay tool" data-bag-overlay="tool"></div>
+            <button class="bag-marker top" data-add-to-cart="top" aria-label="Add fuel bag"><span>+</span><em>Fuel</em></button>
+            <button class="bag-marker frameM" data-add-to-cart="frameM" aria-label="Add frame bag M"><span>+</span><em>Frame M</em></button>
+            <button class="bag-marker frameXL" data-add-to-cart="frameXL" aria-label="Add frame bag XL"><span>+</span><em>Frame XL</em></button>
           </div>
 
           <aside class="setup-panel">
             <h3>Bag setup</h3>
-            <p>Default options for the next bag added to the bike. MKIII is selected automatically; MKII stays available as the value option.</p>
+            <p>Choose a bike, then add or remove bags directly on the frame. The SVG layers carry the preview; the controls only decide what is visible.</p>
             <div class="setup-group bike-colour">
               <span>Bike colour</span>
               <label class="colour-slider">
-                <input type="range" min="0" max="360" value="8" data-bike-color-slider>
+                <input type="range" min="76" max="96" value="88" data-bike-color-slider>
                 <i aria-hidden="true"></i>
               </label>
             </div>
