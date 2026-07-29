@@ -57,7 +57,7 @@ const defaultSetup = {
 
 const state = {
   bike: BIKE_IMAGES[localStorage.getItem("acepacBike")] ? localStorage.getItem("acepacBike") : "gravel",
-  bikeHue: Math.max(0, Math.min(360, Number(localStorage.getItem("acepacBikeHue") || 0))),
+  bikeHue: Math.max(0, Math.min(100, Number(localStorage.getItem("acepacBikeHue") || 12))),
   lang: localStorage.getItem("acepacLang") || "en",
   setup: { ...defaultSetup },
   productConfig: { color: "Black", size: "L", version: "MKIII" },
@@ -71,7 +71,8 @@ function formatPrice(value) {
 }
 
 function bikeColorFromHue(hue) {
-  return Number(hue) === 0 ? "#dddddd" : `hsl(${hue} 48% 58%)`;
+  const lightness = 96 - (Number(hue) * .78);
+  return `hsl(0 0% ${lightness}%)`;
 }
 
 function readCart() {
@@ -264,6 +265,10 @@ function layerFilterFor(item) {
     : "none";
 }
 
+function layerOpacityFor(item) {
+  return item?.color === "Grey" ? ".7" : ".9";
+}
+
 function getSvgLayer(root, id) {
   return root.querySelector(`[id="${id}"]`);
 }
@@ -290,7 +295,7 @@ function applySvgState(bikeNode) {
 
   const bikeLayer = getSvgLayer(bikeNode, "bike");
   if (bikeLayer) {
-    bikeLayer.style.opacity = ".72";
+    bikeLayer.style.opacity = "1";
     bikeLayer.style.filter = "grayscale(1)";
   }
 
@@ -310,7 +315,7 @@ function applySvgState(bikeNode) {
       const layer = getSvgLayer(bikeNode, id);
       if (!layer) return;
       layer.style.display = item ? "inline" : "none";
-      layer.style.opacity = item ? ".7" : "0";
+      layer.style.opacity = item ? layerOpacityFor(item) : "0";
       layer.style.filter = layerFilterFor(item);
       layer.style.pointerEvents = "none";
     });
@@ -330,10 +335,8 @@ function initLanguageToggle() {
     toggles.forEach((button) => {
       button.classList.toggle("cs", state.lang === "cs");
       button.classList.toggle("en", state.lang !== "cs");
-      const flag = button.querySelector("[data-lang-flag-img]");
-      if (flag) {
-        flag.src = state.lang === "cs" ? "assets/flag-cz.png" : "assets/flag-en.png";
-        flag.alt = state.lang === "cs" ? "Cestina" : "English";
+      if (button.dataset.langText !== undefined) {
+        button.textContent = state.lang === "cs" ? "english" : "česky";
       }
       button.setAttribute("aria-label", state.lang === "cs" ? "Prepnout do anglictiny" : "Switch to Czech");
     });

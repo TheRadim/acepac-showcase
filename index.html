@@ -7,6 +7,7 @@
     <meta name="description" content="Modern ACEPAC showcase concept for bikepacking bags, configurator shopping, and product storytelling.">
     <link rel="preload" href="assets/hero-trail.jpeg" as="image">
     <link rel="preload" href="assets/gravel.svg" as="image">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -23,13 +24,9 @@
         <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button class="icon-button search-icon" aria-label="Search"></button>
-        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle>
-          <img src="assets/flag-en.png" alt="English" data-lang-flag-img>
-        </button>
-        <button class="icon-button user-icon" aria-label="User profile"></button>
+        <button class="icon-button" aria-label="Search"><i class="bi bi-search"></i></button>
         <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
-          <span class="cart-icon"></span>
+          <i class="bi bi-bag"></i>
           <span data-cart-count>0</span>
         </button>
         <div class="cart-popover" data-cart-popover>
@@ -45,6 +42,7 @@
           <a class="cart-checkout" href="cart.html">Go to shopping cart</a>
         </div>
       </div>
+      <button class="lang-text-toggle" aria-label="Switch to Czech" data-lang-toggle data-lang-text>česky</button>
     </header>
 
     <main>
@@ -52,16 +50,13 @@
         <div class="hero-inner">
           <div class="hero-copy reveal">
             <p class="eyebrow">ACEPAC concept / Bikepacking without guesswork</p>
-            <h1>Build the bag system around the bike.</h1>
-            <p class="hero-lede">A cleaner shop experience where riders pick their bike, choose the bag positions, and understand the full setup before checkout.</p>
+            <h1>Pack cleaner. Ride further.</h1>
+            <p class="hero-lede">A sharper shopping concept for choosing ACEPAC setups by ride style, bag position and final bike build.</p>
             <div class="hero-actions">
-              <a class="button primary" href="overview.html">Configure bags</a>
-              <a class="button ghost" href="product.html">Saddle Bag MKIII</a>
+              <a class="button primary" href="overview.html">Shop setups</a>
+              <a class="button ghost" href="about.html">About ACEPAC</a>
             </div>
           </div>
-          <a class="hero-bike reveal" href="overview.html" aria-label="Open bike bag configurator">
-            <div class="bike-svg hero-bike-svg" data-bike-inline data-static-bike="gravel" data-preview-bags="saddle,frameM,top" data="assets/gravel.svg" role="img" aria-label="Gravel bike silhouette with ACEPAC bags"></div>
-          </a>
         </div>
       </section>
 
@@ -93,14 +88,17 @@
         <a class="category-panel reveal" href="overview.html">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/banners/_o0a8424_small-2.jpg?698482dd" alt="Bikepacking bags" loading="lazy">
           <span>Bikepacking bags</span>
+          <small>Configure the complete system on the bike.</small>
         </a>
         <a class="category-panel reveal" href="overview.html">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/banners/031a7756_small-1.jpg?698482b8" alt="Backpacks" loading="lazy">
           <span>Backpacks</span>
+          <small>Simple carry for riding, travel and camp days.</small>
         </a>
         <a class="category-panel reveal" href="overview.html">
           <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/banners/obleceni_small-1.jpg?69848261" alt="Clothing" loading="lazy">
           <span>Clothing</span>
+          <small>Quiet technical layers for mixed weather.</small>
         </a>
       </section>
 

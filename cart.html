@@ -6,6 +6,7 @@
     <title>Shopping Cart - ACEPAC Concept</title>
     <meta name="description" content="Shopping cart concept for the ACEPAC bikepacking configurator.">
     <link rel="preload" href="assets/gravel.svg" as="image">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -22,13 +23,9 @@
         <a href="about.html">About us</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
-        <button class="icon-button search-icon" aria-label="Search"></button>
-        <button class="lang-switch en" aria-label="Switch to Czech" data-lang-toggle>
-          <img src="assets/flag-en.png" alt="English" data-lang-flag-img>
-        </button>
-        <button class="icon-button user-icon" aria-label="User profile"></button>
+        <button class="icon-button" aria-label="Search"><i class="bi bi-search"></i></button>
         <button class="cart-trigger" aria-label="Shopping cart" data-cart-toggle>
-          <span class="cart-icon"></span>
+          <i class="bi bi-bag"></i>
           <span data-cart-count>0</span>
         </button>
         <div class="cart-popover" data-cart-popover>
@@ -44,6 +41,7 @@
           <a class="cart-checkout" href="cart.html">Go to shopping cart</a>
         </div>
       </div>
+      <button class="lang-text-toggle" aria-label="Switch to Czech" data-lang-toggle data-lang-text>česky</button>
     </header>
 
     <main class="cart-page">
