@@ -38,6 +38,10 @@ img {
   max-width: 100%;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -247,7 +251,8 @@ button {
 .lang-text-toggle {
   position: absolute;
   right: 16px;
-  bottom: 3px;
+  top: 4px;
+  bottom: auto;
   min-height: auto;
   border: 0;
   padding: 0;
@@ -347,10 +352,25 @@ button {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 18vh;
-  background: linear-gradient(to bottom, transparent, var(--paper));
+  height: 9vh;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, .76) 72%, var(--paper));
   pointer-events: none;
   content: "";
+}
+
+.scroll-down {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  z-index: 2;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: white;
+  font-size: 24px;
+  transform: translateX(-50%);
+  animation: pulseDown 1.6s ease-in-out infinite;
 }
 
 .hero-copy,
@@ -651,25 +671,25 @@ p {
 }
 
 .page-kicker {
-  max-width: var(--content-max);
+  max-width: none;
   margin-inline: auto;
-  padding: clamp(34px, 5vw, 62px) clamp(18px, 5vw, 78px) clamp(12px, 2vw, 24px);
+  padding: clamp(48px, 6vw, 82px) clamp(18px, 7vw, 132px) clamp(18px, 3vw, 38px);
   background: var(--surface);
 }
 
 .page-kicker h1 {
-  max-width: 760px;
-  font-size: clamp(28px, 3vw, 42px);
+  max-width: 1160px;
+  font-size: clamp(36px, 5vw, 72px);
   line-height: 1;
 }
 
 .page-kicker p:last-child {
-  max-width: 720px;
+  max-width: 1040px;
   font-size: 18px;
 }
 
 .configurator {
-  max-width: 1240px;
+  max-width: var(--content-max);
   margin: 0 auto;
   padding: clamp(18px, 4vw, 42px) clamp(18px, 5vw, 56px) clamp(42px, 6vw, 76px);
   border: 0;
@@ -678,17 +698,47 @@ p {
   box-shadow: none;
 }
 
-.configurator-toolbar,
+.configurator-heading,
+.bike-control-strip,
 .bike-workbench {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(360px, 520px);
   gap: clamp(18px, 3vw, 42px);
-  align-items: end;
+  align-items: start;
 }
 
-.configurator-toolbar h2 {
+.configurator-heading h2 {
   font-size: clamp(28px, 3vw, 42px);
   line-height: 1;
+}
+
+.bike-control-strip {
+  margin-top: 22px;
+  padding: 18px 0 6px;
+  border-top: 1px solid rgba(23, 23, 23, .1);
+}
+
+.control-block {
+  display: grid;
+  gap: 10px;
+}
+
+.control-block > span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.bike-colour-tools {
+  display: grid;
+  grid-template-columns: auto minmax(240px, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+
+.choice-row.compact {
+  flex-wrap: nowrap;
 }
 
 .segmented {
@@ -726,9 +776,9 @@ p {
 }
 
 .bike-workbench {
-  grid-template-columns: minmax(320px, 760px) minmax(280px, 320px);
-  justify-content: center;
-  margin-top: 30px;
+  grid-template-columns: minmax(320px, 860px) minmax(280px, 340px);
+  justify-content: space-between;
+  margin-top: 28px;
   align-items: start;
 }
 
@@ -743,7 +793,7 @@ p {
 
 .bike-stage {
   width: 100%;
-  max-width: 780px;
+  max-width: 860px;
   justify-self: center;
 }
 
@@ -816,6 +866,10 @@ p {
   background: var(--accent);
 }
 
+.bag-marker.selected span {
+  box-shadow: 0 0 0 5px rgba(228, 48, 32, .16), 0 14px 34px rgba(0, 0, 0, .18);
+}
+
 .bag-marker:hover span {
   transform: scale(1.08);
 }
@@ -876,7 +930,7 @@ p {
   justify-self: end;
   width: 100%;
   max-width: 320px;
-  gap: 16px;
+  gap: 14px;
   padding: 8px 0 0;
   border: 0;
   background: transparent;
@@ -884,6 +938,12 @@ p {
 
 .setup-panel p {
   margin-bottom: 0;
+}
+
+.setup-panel h3 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1;
 }
 
 .setup-group {
@@ -922,6 +982,12 @@ p {
   background: var(--ink);
 }
 
+.choice-row button[data-bike-color-preset].active {
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
 .choice-row button:hover {
   border-color: var(--ink);
   transform: translateY(-2px);
@@ -944,7 +1010,7 @@ p {
   height: 3px;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, #fff, #111);
+  background: linear-gradient(90deg, #e9e9e9, #ff3b30, #ffcc00, #34c759, #00c7be, #007aff, #af52de, #111);
 }
 
 .colour-slider input[type="range"]::-webkit-slider-thumb {
@@ -975,6 +1041,12 @@ p {
   box-shadow: inset 0 0 0 4px rgba(255, 255, 255, .44);
 }
 
+.setup-actions {
+  display: grid;
+  gap: 8px;
+  padding-top: 4px;
+}
+
 .bag-category-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -993,7 +1065,7 @@ p {
 
 .bag-category-grid.compact .bag-category {
   min-height: 160px;
-  padding: 12px;
+  padding: 8px 10px 12px;
 }
 
 .bag-category-grid.compact .bag-category img {
@@ -1012,12 +1084,15 @@ p {
   grid-template-rows: 1fr auto;
   padding: 18px;
   text-align: center;
-  transition: transform .2s ease, box-shadow .2s ease;
+  border: 0;
+  background: transparent;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
 .bag-category:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow);
+  background: #fafafa;
+  box-shadow: 0 22px 54px rgba(0, 0, 0, .07);
 }
 
 .bag-category img {
@@ -1643,6 +1718,18 @@ p {
   }
 }
 
+@keyframes pulseDown {
+  0%,
+  100% {
+    opacity: .62;
+    transform: translate(-50%, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, 8px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1704,7 +1791,8 @@ p {
   .about-hero,
   .about-feature,
   .cart-layout,
-  .configurator-toolbar,
+  .configurator-heading,
+  .bike-control-strip,
   .bike-workbench,
   .product-description {
     grid-template-columns: 1fr;
@@ -1790,6 +1878,10 @@ p {
   }
 
   .segmented {
+    grid-template-columns: 1fr;
+  }
+
+  .bike-colour-tools {
     grid-template-columns: 1fr;
   }
 

@@ -7,8 +7,29 @@ const BIKE_IMAGES = {
 const BAG_PRODUCTS = {
   saddle: { name: "Saddle Bag MKIII", basePrice: 97.27 },
   frameM: { name: "Zip Frame Bag M MKIII", basePrice: 55.07 },
-  frameXL: { name: "Zip Frame Bag XL MKIII", basePrice: 67.07 },
+  frameL: { name: "Zip Frame Bag L MKIII", basePrice: 67.07 },
   top: { name: "Fuel Bag MKIII", basePrice: 40.58 }
+};
+
+const BAG_CONFIG = {
+  frame: {
+    title: "Ramova brasna",
+    description: "Stredova brasna vyuzije hlavni trojuhelnik a drzi hmotnost nizko.",
+    detail: "Detail ramove brasny",
+    sizeGroup: "frame"
+  },
+  saddle: {
+    title: "Podsedlova brasna",
+    description: "Velky zadni objem pro spacaky, obleceni a mekke vybaveni bez nosice.",
+    detail: "Detail podsedlove brasny",
+    sizeGroup: "saddle"
+  },
+  top: {
+    title: "Fuel bag",
+    description: "Maly ulozny prostor na horni trubce pro jidlo, telefon a veci, ktere chces hned po ruce.",
+    detail: "Detail fuel bagu",
+    sizeGroup: "none"
+  }
 };
 
 const BIKE_COLOR_LAYER = {
@@ -18,16 +39,16 @@ const BIKE_COLOR_LAYER = {
 };
 
 const BIKE_ALLOWED_BAGS = {
-  gravel: ["saddle", "top", "frameM", "frameXL"],
+  gravel: ["saddle", "top", "frameM", "frameL"],
   mtb: ["saddle", "top"],
-  road: ["saddle", "top", "frameM", "frameXL"]
+  road: ["saddle", "top", "frameM", "frameL"]
 };
 
 const BAG_LAYER_IDS = {
   saddle: ["Saddlebag", "Saddlebag-copy"],
   top: ["toptube", "toptube-copy"],
   frameM: ["framebagM", "framebagM-copy"],
-  frameXL: ["framebagXL", "framebagXL-copy"]
+  frameL: ["framebagXL", "framebagXL-copy"]
 };
 
 const MARKER_POSITIONS = {
@@ -57,8 +78,10 @@ const defaultSetup = {
 
 const state = {
   bike: BIKE_IMAGES[localStorage.getItem("acepacBike")] ? localStorage.getItem("acepacBike") : "gravel",
-  bikeHue: Math.max(0, Math.min(100, Number(localStorage.getItem("acepacBikeHue") || 12))),
-  lang: localStorage.getItem("acepacLang") || "en",
+  bikeHue: Math.max(0, Math.min(360, Number(localStorage.getItem("acepacBikeHue") || 0))),
+  bikeColor: localStorage.getItem("acepacBikeColor") || "#dddddd",
+  selectedBag: BAG_CONFIG[localStorage.getItem("acepacSelectedBag")] ? localStorage.getItem("acepacSelectedBag") : "frame",
+  lang: localStorage.getItem("acepacLang") || "cs",
   setup: { ...defaultSetup },
   productConfig: { color: "Black", size: "L", version: "MKIII" },
   cart: readCart()
@@ -71,8 +94,24 @@ function formatPrice(value) {
 }
 
 function bikeColorFromHue(hue) {
-  const lightness = 96 - (Number(hue) * .78);
-  return `hsl(0 0% ${lightness}%)`;
+  return `hsl(${Number(hue)} 58% 52%)`;
+}
+
+function setBikeColor(color, hue = null) {
+  state.bikeColor = color;
+  if (hue !== null) {
+    state.bikeHue = Number(hue);
+    localStorage.setItem("acepacBikeHue", String(state.bikeHue));
+  }
+  localStorage.setItem("acepacBikeColor", state.bikeColor);
+  document.documentElement.style.setProperty("--bike-color", state.bikeColor);
+  document.querySelectorAll("[data-bike-color-slider]").forEach((slider) => {
+    if (hue !== null) slider.value = String(state.bikeHue);
+  });
+  document.querySelectorAll("[data-bike-color-preset]").forEach((button) => {
+    button.classList.toggle("active", button.dataset.bikeColorPreset === state.bikeColor);
+  });
+  renderSvgObjects();
 }
 
 function readCart() {
@@ -91,11 +130,17 @@ function readCart() {
 
 function normalizeBagType(type) {
   if (type === "frame") return "frameM";
+  if (type === "frameXL") return "frameL";
   return type;
 }
 
 function currentFrameType() {
-  return state.setup.frameSize === "XL" ? "frameXL" : "frameM";
+  return state.setup.frameSize === "L" ? "frameL" : "frameM";
+}
+
+function currentSelectedType() {
+  if (state.selectedBag === "frame") return currentFrameType();
+  return state.selectedBag;
 }
 
 function saveCart() {
@@ -104,14 +149,14 @@ function saveCart() {
 
 function getCartItem(type) {
   if (type === "frame") {
-    return state.cart.find((item) => item.type === "frameM" || item.type === "frameXL");
+    return state.cart.find((item) => item.type === "frameM" || item.type === "frameL");
   }
   return state.cart.find((item) => item.type === type);
 }
 
 function priceFor(item) {
   const product = BAG_PRODUCTS[item.type];
-  const sizeDelta = item.type === "frameM" || item.type === "frameXL"
+  const sizeDelta = item.type === "frameM" || item.type === "frameL"
     ? 0
     : item.size === "M" ? -8 : item.size === "XL" ? 12 : 0;
   const versionDelta = item.version === "MKII" ? -10 : 0;
@@ -126,19 +171,38 @@ function addOrRemoveBag(type, source = "overview") {
   if (!isBagAllowed(type)) return;
   const resolvedType = type === "frame" ? currentFrameType() : type;
   const existingIndex = type === "frame"
-    ? state.cart.findIndex((item) => item.type === "frameM" || item.type === "frameXL")
+    ? state.cart.findIndex((item) => item.type === "frameM" || item.type === "frameL")
     : state.cart.findIndex((item) => item.type === resolvedType);
   if (existingIndex >= 0) {
     state.cart.splice(existingIndex, 1);
   } else {
-    if (resolvedType === "frameM" || resolvedType === "frameXL") {
-      state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameXL");
+    if (resolvedType === "frameM" || resolvedType === "frameL") {
+      state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
     }
     const config = source === "product" ? state.productConfig : state.setup;
-    state.cart.push({ type: resolvedType, ...config, size: resolvedType === "frameXL" ? "XL" : config.size });
+    state.cart.push({ type: resolvedType, ...config, size: resolvedType === "frameL" ? "L" : config.size });
   }
   saveCart();
   renderCart();
+}
+
+function addConfiguredBag() {
+  if (!isBagAllowed(state.selectedBag)) return;
+  const resolvedType = currentSelectedType();
+  const nextConfig = {
+    type: resolvedType,
+    ...state.setup,
+    size: resolvedType === "frameM" || resolvedType === "frameL" ? state.setup.frameSize : state.setup.size
+  };
+  if (resolvedType === "frameM" || resolvedType === "frameL") {
+    state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
+  } else {
+    state.cart = state.cart.filter((item) => item.type !== resolvedType);
+  }
+  state.cart.push(nextConfig);
+  saveCart();
+  renderCart();
+  renderConfiguratorPanel();
 }
 
 function removeBag(type) {
@@ -152,30 +216,44 @@ function setBike(type) {
   state.bike = type;
   localStorage.setItem("acepacBike", type);
   state.cart = state.cart.filter((item) => isBagAllowed(item.type));
+  if (!isBagAllowed(state.selectedBag)) {
+    state.selectedBag = "saddle";
+    localStorage.setItem("acepacSelectedBag", state.selectedBag);
+  }
   saveCart();
   renderBike();
   renderCart();
+  renderConfiguratorPanel();
 }
 
 function isBagAllowed(type) {
   if (type === "frame") {
     return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(currentFrameType());
   }
+  if (type === "frameM" || type === "frameL") {
+    return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(type);
+  }
   return (BIKE_ALLOWED_BAGS[state.bike] || []).includes(type);
 }
 
 function setBikeHue(hue) {
-  state.bikeHue = Number(hue);
-  localStorage.setItem("acepacBikeHue", String(state.bikeHue));
-  document.documentElement.style.setProperty("--bike-color", bikeColorFromHue(state.bikeHue));
-  renderSvgObjects();
+  setBikeColor(bikeColorFromHue(hue), hue);
+}
+
+function setSelectedBag(type) {
+  if (!BAG_CONFIG[type] || !isBagAllowed(type)) return;
+  state.selectedBag = type;
+  localStorage.setItem("acepacSelectedBag", type);
+  renderBike();
+  renderCart();
+  renderConfiguratorPanel();
 }
 
 function renderBike() {
   const selected = BIKE_IMAGES[state.bike] || BIKE_IMAGES.gravel;
   const stage = document.querySelector("[data-bike-stage]");
   document.documentElement.style.setProperty("--bike-src", `url("${selected.src}")`);
-  document.documentElement.style.setProperty("--bike-color", bikeColorFromHue(state.bikeHue));
+  document.documentElement.style.setProperty("--bike-color", state.bikeColor);
 
   stage?.classList.add("is-switching");
   document.querySelectorAll("[data-bike-inline]").forEach((bikeNode) => {
@@ -189,11 +267,12 @@ function renderBike() {
     button.classList.toggle("active", button.dataset.bikeButton === state.bike);
   });
 
-  document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
-    const type = button.dataset.addToCart;
+  document.querySelectorAll("[data-select-bag]").forEach((button) => {
+    const type = button.dataset.selectBag;
     const allowed = isBagAllowed(type);
     button.hidden = !allowed;
     button.disabled = !allowed;
+    button.classList.toggle("selected", type === state.selectedBag);
     if (allowed && MARKER_POSITIONS[state.bike]?.[type]) {
       const [left, top] = MARKER_POSITIONS[state.bike][type];
       button.style.setProperty("--marker-left", `${left}%`);
@@ -212,7 +291,7 @@ function renderCart() {
   document.querySelectorAll("[data-cart-more]").forEach((node) => {
     const extra = Math.max(0, state.cart.length - 3);
     node.hidden = extra === 0;
-    node.textContent = extra ? `+ ${extra} more` : "";
+    node.textContent = extra ? `+ ${extra} dalsi` : "";
   });
 
   document.querySelectorAll("[data-cart-total]").forEach((node) => {
@@ -223,12 +302,16 @@ function renderCart() {
     const type = button.dataset.addToCart;
     const active = Boolean(getCartItem(type));
       button.classList.toggle("active", active);
-      if (button.classList.contains("bag-marker")) {
-        const symbol = button.querySelector("span");
-        if (symbol) symbol.textContent = active ? "-" : "+";
-        const product = type === "frame" ? BAG_PRODUCTS[currentFrameType()] : BAG_PRODUCTS[type];
-        button.setAttribute("aria-label", `${active ? "Remove" : "Add"} ${product?.name || type}`);
-      }
+  });
+
+  document.querySelectorAll("[data-select-bag]").forEach((button) => {
+    const type = button.dataset.selectBag;
+    const active = Boolean(getCartItem(type));
+    button.classList.toggle("active", active);
+    const symbol = button.querySelector("span");
+    if (symbol) symbol.textContent = active ? "-" : "+";
+    const product = type === "frame" ? BAG_PRODUCTS[currentFrameType()] : BAG_PRODUCTS[type];
+    button.setAttribute("aria-label", `${type === state.selectedBag ? "Upravit" : "Vybrat"} ${product?.name || type}`);
   });
 
   document.querySelectorAll("[data-cart-items]").forEach((cartItems) => {
@@ -239,16 +322,16 @@ function renderCart() {
             <div class="cart-item">
               <div>
                 <strong>${product.name}</strong>
-                <span>${item.color} / ${item.type === "frameM" ? "M" : item.type === "frameXL" ? "XL" : item.size} / ${item.version}</span>
+                <span>${item.color === "Grey" ? "Seda" : "Cerna"} / ${item.type === "frameM" ? "M" : item.type === "frameL" ? "L" : item.size} / ${item.version}</span>
               </div>
               <div>
                 <strong>${formatPrice(priceFor(item))}</strong>
-                <button data-remove-bag="${item.type}" aria-label="Remove ${product.name}">Remove</button>
+                <button data-remove-bag="${item.type}" aria-label="Odebrat ${product.name}">Odebrat</button>
               </div>
             </div>
           `;
         }).join("")
-      : '<p class="cart-empty">No bags selected yet. Add a bag from the bike preview or product page.</p>';
+      : '<p class="cart-empty">Zatim neni vybrana zadna brasna. Zacni kliknutim na pozici v kole.</p>';
   });
 
   document.querySelectorAll("[data-remove-bag]").forEach((button) => {
@@ -267,6 +350,21 @@ function layerFilterFor(item) {
 
 function layerOpacityFor(item) {
   return item?.color === "Grey" ? ".7" : ".9";
+}
+
+function previewItemFor(type, bikeNode) {
+  const cartItem = getCartItem(type);
+  if (cartItem) return cartItem;
+  const isConfiguratorBike = Boolean(bikeNode.closest("[data-bike-stage]"));
+  const selectedType = currentSelectedType();
+  if (isConfiguratorBike && type === selectedType) {
+    return {
+      type,
+      ...state.setup,
+      size: type === "frameM" || type === "frameL" ? state.setup.frameSize : state.setup.size
+    };
+  }
+  return null;
 }
 
 function getSvgLayer(root, id) {
@@ -303,14 +401,14 @@ function applySvgState(bikeNode) {
     const layer = getSvgLayer(bikeNode, id);
     if (!layer) return;
     layer.style.display = id === BIKE_COLOR_LAYER[bikeType] ? "inline" : "none";
-    layer.setAttribute("fill", bikeColorFromHue(state.bikeHue));
+    layer.setAttribute("fill", state.bikeColor);
     layer.style.opacity = "1";
   });
 
   Object.entries(BAG_LAYER_IDS).forEach(([type, ids]) => {
     const item = previewBags
       ? previewBags.includes(type) ? { color: "Black" } : null
-      : getCartItem(type);
+      : previewItemFor(type, bikeNode);
     ids.forEach((id) => {
       const layer = getSvgLayer(bikeNode, id);
       if (!layer) return;
@@ -320,6 +418,38 @@ function applySvgState(bikeNode) {
       layer.style.pointerEvents = "none";
     });
   });
+}
+
+function renderConfiguratorPanel() {
+  const config = BAG_CONFIG[state.selectedBag];
+  if (!config) return;
+  const title = document.querySelector("[data-selected-bag-title]");
+  const description = document.querySelector("[data-selected-bag-description]");
+  const link = document.querySelector("[data-selected-product-link]");
+  const button = document.querySelector("[data-config-add-to-cart]");
+  const frameSizeGroup = document.querySelector("[data-frame-size-group]");
+  const saddleSizeGroup = document.querySelector("[data-saddle-size-group]");
+  const resolvedType = currentSelectedType();
+  const product = BAG_PRODUCTS[resolvedType];
+  const inCart = Boolean(getCartItem(state.selectedBag));
+
+  if (title) title.textContent = config.title;
+  if (description) description.textContent = config.description;
+  if (link) link.textContent = config.detail;
+  if (button) {
+    button.textContent = inCart ? "Aktualizovat v kosiku" : "Pridat do kosiku";
+    button.disabled = !product;
+  }
+
+  if (frameSizeGroup) frameSizeGroup.hidden = config.sizeGroup !== "frame";
+  if (saddleSizeGroup) saddleSizeGroup.hidden = config.sizeGroup !== "saddle";
+
+  document.querySelectorAll("[data-setup-choice]").forEach((item) => {
+    const key = item.dataset.setupChoice;
+    item.classList.toggle("active", state.setup[key] === item.dataset.value);
+  });
+
+  renderSvgObjects();
 }
 
 function renderSvgObjects() {
@@ -404,8 +534,16 @@ function initConfigurator() {
     bikeColorSlider.addEventListener("input", () => setBikeHue(bikeColorSlider.value));
   }
 
+  document.querySelectorAll("[data-bike-color-preset]").forEach((button) => {
+    button.addEventListener("click", () => setBikeColor(button.dataset.bikeColorPreset));
+  });
+
   document.querySelectorAll("[data-bike-button]").forEach((button) => {
     button.addEventListener("click", () => setBike(button.dataset.bikeButton));
+  });
+
+  document.querySelectorAll("[data-select-bag]").forEach((button) => {
+    button.addEventListener("click", () => setSelectedBag(button.dataset.selectBag));
   });
 
   document.querySelectorAll("[data-setup-choice]").forEach((button) => {
@@ -418,7 +556,7 @@ function initConfigurator() {
       if (key === "frameSize") {
         const existingFrame = getCartItem("frame");
         if (existingFrame) {
-          state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameXL");
+          state.cart = state.cart.filter((item) => item.type !== "frameM" && item.type !== "frameL");
           const nextType = currentFrameType();
           state.cart.push({ ...existingFrame, type: nextType, frameSize: state.setup.frameSize, size: state.setup.frameSize });
           saveCart();
@@ -433,6 +571,15 @@ function initConfigurator() {
       if (key === "color" && button.dataset.color) {
         document.documentElement.style.setProperty("--bag-color", button.dataset.color);
       }
+      renderConfiguratorPanel();
+    });
+  });
+
+  document.querySelectorAll("[data-config-add-to-cart]").forEach((button) => {
+    button.addEventListener("click", () => {
+      addConfiguredBag();
+      button.textContent = "Pridano";
+      window.setTimeout(() => renderConfiguratorPanel(), 900);
     });
   });
 
@@ -442,7 +589,7 @@ function initConfigurator() {
       addOrRemoveBag(button.dataset.addToCart, source);
       if (button.classList.contains("button")) {
         const original = button.textContent;
-        button.textContent = getCartItem(button.dataset.addToCart) ? "Added to cart" : "Removed";
+        button.textContent = getCartItem(button.dataset.addToCart) ? "Pridano do kosiku" : "Odebrano";
         window.setTimeout(() => {
           button.textContent = original;
         }, 1200);
@@ -523,5 +670,11 @@ initConfigurator();
 initProductGallery();
 initOptions();
 initReveal();
+if (!isBagAllowed(state.selectedBag)) {
+  state.selectedBag = "saddle";
+  localStorage.setItem("acepacSelectedBag", state.selectedBag);
+}
+setBikeColor(state.bikeColor);
 renderBike();
 renderCart();
+renderConfiguratorPanel();

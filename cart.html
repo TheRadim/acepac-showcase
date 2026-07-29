@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="cs">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Shopping Cart - ACEPAC Concept</title>
-    <meta name="description" content="Shopping cart concept for the ACEPAC bikepacking configurator.">
+    <title>Kosik - ACEPAC koncept</title>
+    <meta name="description" content="Koncept kosiku pro ACEPAC bikepackingovy konfigurator.">
     <link rel="preload" href="assets/gravel.svg" as="image">
+    <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="styles.css">
   </head>
@@ -14,13 +15,13 @@
       <a class="brand" href="index.html" aria-label="ACEPAC home">
         <img src="https://cdn.myshoptet.com/usr/www.acepac.bike/user/logos/acepac_all_white-3.svg" alt="ACEPAC">
       </a>
-      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" data-menu-toggle>Menu</button>
-      <nav class="main-nav" aria-label="Main menu" data-nav>
-        <a href="overview.html">Bikepacking bags</a>
-        <a href="overview.html">Backpacks</a>
-        <a href="overview.html">Clothing</a>
-        <a href="overview.html">Accessories</a>
-        <a href="about.html">About us</a>
+      <button class="menu-toggle" aria-label="Otevrit menu" aria-expanded="false" data-menu-toggle>Menu</button>
+      <nav class="main-nav" aria-label="Hlavni menu" data-nav>
+        <a href="overview.html">Bikepackingove brasny</a>
+        <a href="overview.html">Batohy</a>
+        <a href="overview.html">Obleceni</a>
+        <a href="overview.html">Doplnky</a>
+        <a href="about.html">O nas</a>
       </nav>
       <div class="header-actions" aria-label="Shop tools">
         <button class="icon-button" aria-label="Search"><i class="bi bi-search"></i></button>
@@ -30,26 +31,26 @@
         </button>
         <div class="cart-popover" data-cart-popover>
           <div class="cart-popover-head">
-            <strong>Your setup</strong>
-            <button aria-label="Close cart" data-cart-close>Close</button>
+            <strong>Tvuj setup</strong>
+            <button aria-label="Zavrit kosik" data-cart-close>Zavrit</button>
           </div>
           <div class="mini-stage">
             <div class="bike-svg mini-bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Cart bike preview"></div>
             <span class="cart-more" data-cart-more hidden></span>
           </div>
           <div class="cart-items" data-cart-items></div>
-          <a class="cart-checkout" href="cart.html">Go to shopping cart</a>
+          <a class="cart-checkout" href="cart.html">Prejit do kosiku</a>
         </div>
       </div>
-      <button class="lang-text-toggle" aria-label="Switch to Czech" data-lang-toggle data-lang-text>česky</button>
+      <button class="lang-text-toggle" aria-label="Switch to English" data-lang-toggle data-lang-text>english</button>
     </header>
 
     <main class="cart-page">
       <section class="cart-layout reveal">
         <div>
-          <p class="breadcrumb">Home / Shopping cart</p>
-          <h1>Your bikepacking setup</h1>
-          <p class="lead">A clearer basket can keep the customer oriented: bike type first, selected bags layered in place, exact options listed underneath.</p>
+          <p class="breadcrumb">Domu / Kosik</p>
+          <h1>Tvuj bikepackingovy setup</h1>
+          <p class="lead">Prehlednejsi kosik drzi zakaznika v obraze: nejdriv typ kola, potom brasny ve spravne pozici a pod tim presne zvolene varianty.</p>
           <div class="cart-bike-preview">
             <div class="bike-svg cart-bike-svg" data-bike-inline data="assets/gravel.svg" role="img" aria-label="Selected bike in cart"></div>
             <span class="cart-more" data-cart-more hidden></span>
@@ -57,13 +58,13 @@
         </div>
 
         <aside class="cart-summary">
-          <h2>Basket</h2>
+          <h2>Kosik</h2>
           <div class="cart-items" data-cart-items></div>
           <div class="cart-total">
-            <span>Total</span>
+            <span>Celkem</span>
             <strong data-cart-total>EUR 0.00</strong>
           </div>
-          <a class="button primary wide" href="overview.html">Continue configuring</a>
+          <a class="button primary wide" href="overview.html">Pokracovat v konfiguraci</a>
         </aside>
       </section>
     </main>
